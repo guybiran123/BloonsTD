@@ -1,5 +1,3 @@
-from point import Point
-
 
 class Tower:
     """
