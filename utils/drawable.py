@@ -1,8 +1,9 @@
 from point import Point
+from direction import Direction
 
 
 class Drawable:
-    def __init__(self, position: Point, direction: float, image: str):
+    def __init__(self, position: Point, direction: Direction, image: str):
         self.__position = position
         self.__direction = direction
         self.__image = image
@@ -40,5 +41,26 @@ class Drawable:
     def get_direction(self):
         return self.__direction
 
-    def set_direction(self, direction):
+    def set_direction(self, direction: Direction):
         self.__direction = direction
+
+    def get_direction_value(self):
+        return self.__direction.value
+
+    def set_direction_value(self, value):
+        self.__direction.value = value
+
+    def get_does_direction_matter(self):
+        return self.__direction.does_matter
+
+    def set_does_direction_matter(self, does_matter: bool):
+        self.__direction.does_matter = does_matter
+
+
+
+
+
+
+
+
+
