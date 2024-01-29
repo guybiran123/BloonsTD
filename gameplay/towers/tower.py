@@ -1,6 +1,7 @@
 from utils.point import Point
 from gameplay.game_map import GameMap
 from utils.drawable import Drawable
+from utils.direction import Direction
 
 
 class Tower(Drawable):
@@ -10,7 +11,6 @@ class Tower(Drawable):
     def __init__(
         self,
         position: Point,
-        direction: float,
         image: str,
         cost: int,
         sell_cost: int,
@@ -18,20 +18,19 @@ class Tower(Drawable):
         shot_damage: int,
         shooting_speed: int,
         range_radius: int,
-        is_pressed: bool,
-        is_dragged: bool,
         game_map: GameMap
     ):
-        super().__init__(position, direction, image)
+        super().__init__(position, Direction(True, 0), image)
         self.__cost = cost
         self.__sell_cost = sell_cost
         self.__shot_speed = shot_speed
         self.__shot_damage = shot_damage
         self.__shooting_speed = shooting_speed
         self.__range_radius = range_radius
-        self.__is_pressed = is_pressed
-        self.__is_dragged = is_dragged
+        self.__is_pressed = False
+        self.__is_set = False
         self.__game_map = game_map
+        self.__balloons_in_range = []
 
     def get_cost(self) -> int:
         return self.__cost
