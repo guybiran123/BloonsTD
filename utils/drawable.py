@@ -4,27 +4,27 @@ from direction import Direction
 
 class Drawable:
     def __init__(self, position: Point, direction: Direction, image: str):
-        self.__position = position
-        self.__direction = direction
-        self.__image = image
+        self._position = position
+        self._direction = direction
+        self._image = image
 
     def get_position(self):
-        return self.__position
+        return self._position
 
     def set_position(self, position: Point):
-        self.__position = position
+        self._position = position
 
     def set_x(self, x: int):
-        self.__position.set_x(x)
+        self._position.set_x(x)
 
     def set_y(self, y: int):
-        self.__position.set_y(y)
+        self._position.set_y(y)
 
     def add_to_x(self, value: int):
-        self.__position.set_x(self.__position.get_x() + value)
+        self._position.set_x(self._position.get_x() + value)
 
     def add_to_y(self, value: int):
-        self.__position.set_y(self.__position.get_y() + value)
+        self._position.set_y(self._position.get_y() + value)
 
     def increase_x(self):
         self.add_to_x(1)
@@ -39,22 +39,22 @@ class Drawable:
         self.add_to_y(-1)
 
     def get_direction(self):
-        return self.__direction
+        return self._direction
 
     def set_direction(self, direction: Direction):
-        self.__direction = direction
+        self._direction = direction
 
     def get_direction_value(self):
-        return self.__direction.value
+        return self._direction.value
 
     def set_direction_value(self, value):
-        self.__direction.value = value
+        self._direction.value = value
 
     def get_does_direction_matter(self):
-        return self.__direction.does_matter
+        return self._direction.does_matter
 
     def set_does_direction_matter(self, does_matter: bool):
-        self.__direction.does_matter = does_matter
+        self._direction.does_matter = does_matter
 
 
 
