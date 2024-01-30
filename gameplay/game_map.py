@@ -9,6 +9,15 @@ class GameMap:
         self.__shots = []
         self.__game = game
 
+    def get_balloons(self):
+        return self.__balloons
+
+    def get_towers(self):
+        return self.__towers
+
+    def get_shots(self):
+        return self.__shots
+
     def get_game(self):
         return self.__game
 

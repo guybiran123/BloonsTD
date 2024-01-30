@@ -3,6 +3,8 @@ from gameplay.game_map import GameMap
 from utils.drawable import Drawable
 from utils.direction import Direction
 from utils.constants import *
+from gameplay.balloon import Balloon
+from gameplay.shots.dart import Dart
 
 
 class Tower(Drawable):
@@ -57,9 +59,34 @@ class Tower(Drawable):
     def set_is_pressed(self, is_pressed: bool) -> None:
         self._is_pressed = is_pressed
 
-    def get_is_dragged(self):
+    def get_is_set(self):
         return self._is_set
 
-    def set_is_dragged(self, is_set) -> None:
+    def set_is_set(self, is_set) -> None:
         self._is_set = is_set
 
+    def is_balloon_in_range(self, balloon: Balloon) -> bool:
+        return self._range_radius >= self._position.get_distance(balloon.get_position())
+
+    def activate(self):
+        self.add_to_balloons_in_range()
+        first_balloon = self.get_first_balloon()
+        self.shoot_balloon(first_balloon)
+
+    def add_to_balloons_in_range(self):
+        for balloon in self._game_map.get_balloons():
+            if self.is_balloon_in_range(balloon):
+                self._balloons_in_range.append(balloon)
+
+    def get_first_balloon(self):
+        return max(self._balloons_in_range, key=lambda balloon: balloon.get_route_progress())
+
+    def shoot_balloon(self, balloon: Balloon):
+        dart = Dart(
+            self._position,
+            self._direction.value,
+            self._range_radius,
+            self._shot_damage,
+            self._shot_speed,
+            self._game_map)
+        dart.activate()

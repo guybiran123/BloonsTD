@@ -11,6 +11,7 @@ class Balloon(Drawable):
         super().__init__(position, Direction(False, INITIAL_ANGLE), BALLOON_HP_TO_IMAGE[hp])
         self.__hp = hp
         self.__speed = BALLOON_HP_TO_SPEED[self.__hp]
+        self.__route_progress = 0
         self.__game_map = game_map
 
     def get_hp(self):
@@ -18,6 +19,9 @@ class Balloon(Drawable):
 
     def set_hp(self, hp: int):
         self.__hp = hp
+
+    def get_route_progress(self):
+        return self.__route_progress
 
     def hit(self, damage: int):
         self.__game_map.add_money(min(damage, self.__hp))

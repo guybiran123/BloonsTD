@@ -21,3 +21,9 @@ class Shot(Drawable):
         self._damage = damage
         self._speed = speed
         self._game_map = game_map
+
+    def get_damage(self):
+        return self._damage
+
+    def activate(self):
+        pass
