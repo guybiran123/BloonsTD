@@ -4,6 +4,7 @@ from enum import Enum
 WINDOW_HEIGHT = 475
 WINDOW_WIDTH = 639
 INITIAL_ANGLE = 0
+COOLDOWN_TIME = 100
 
 # --------Dictionaries-------------
 

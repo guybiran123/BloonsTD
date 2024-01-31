@@ -3,6 +3,7 @@ from utils.point import Point
 from utils.direction import Direction
 from gameplay.game_map import GameMap
 
+
 class Dart(Shot):
 
     def __init__(self, position: Point, direction: float, shot_range: int, damage: int, speed: int, game_map: GameMap):

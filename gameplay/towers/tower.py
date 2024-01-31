@@ -74,7 +74,7 @@ class Tower(Drawable):
         self.shoot_balloon(first_balloon)
 
     def add_to_balloons_in_range(self):
-        for balloon in self._game_map.get_balloons():
+        for balloon in self._game_map.get_balloons().sprites():
             if self.is_balloon_in_range(balloon):
                 self._balloons_in_range.append(balloon)
 
@@ -89,4 +89,5 @@ class Tower(Drawable):
             self._shot_damage,
             self._shot_speed,
             self._game_map)
+
         dart.activate()

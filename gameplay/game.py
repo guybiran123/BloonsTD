@@ -1,4 +1,5 @@
 from utils.constants import *
+from balloon import Balloon
 
 class Game:
 
