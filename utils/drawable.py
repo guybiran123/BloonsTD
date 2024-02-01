@@ -8,12 +8,18 @@ class Drawable(pygame.sprite.Sprite):
         super().__init__()
         self._position = position
         self._direction = direction
-        self._image = pygame.image.load(image).convert()
-        self.rect = self._image.get_rect()
+        self._original_image = pygame.image.load(image).convert()
+        self.image = self._original_image.copy()
+        self.rect = self.image.get_rect()
         self.align_rect_to_pos()
 
     def align_rect_to_pos(self):
         self.rect.center = self._position.get_x(), self._position.get_y()
+
+    def rotate_image(self):
+        if self._direction.does_matter:
+            self.image = pygame.transform.rotate(self._original_image, self._direction.value)
+            self.align_rect_to_pos()
 
     def get_position(self):
         return self._position
@@ -59,12 +65,14 @@ class Drawable(pygame.sprite.Sprite):
 
     def set_direction(self, direction: Direction):
         self._direction = direction
+        self.rotate_image()
 
     def get_direction_value(self):
         return self._direction.value
 
     def set_direction_value(self, value):
         self._direction.value = value
+        self.rotate_image()
 
     def get_does_direction_matter(self):
         return self._direction.does_matter

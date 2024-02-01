@@ -28,3 +28,21 @@ class Point:
 
     def get_distance(self, point):
         return math.sqrt(((self.__x - point.__x) ** 2) + ((self.__y - point.__y) ** 2))
+
+    def calc_angle_to_point(self, point):
+        x1, y1 = self.__x, self.__y
+        x2, y2 = point.__x, point.__y
+
+        dx = x2 - x1
+        dy = y2 - y1
+
+        # Use atan2 to calculate the angle
+        angle_rad = math.atan2(dy, dx)
+
+        # Convert the angle to degrees
+        angle_deg = math.degrees(angle_rad)
+        # Ensure the angle is positive
+        if angle_deg < 0:
+            angle_deg += 360
+
+        return -angle_deg - 90

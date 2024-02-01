@@ -33,3 +33,8 @@ class Maps(Enum):
     MAP1 = 1
     MAP2 = 2
     MAP3 = 3
+
+
+class Axis(Enum):
+    X = 1
+    Y = 2

@@ -1,3 +1,5 @@
+import threading
+import pygame
 from utils.point import Point
 from gameplay.game_map import GameMap
 from utils.drawable import Drawable
@@ -11,27 +13,29 @@ class Tower(Drawable):
     """
     A parent class that represents a tower in the game.
     """
+
     def __init__(
-        self,
-        position: Point,
-        image: str,
-        cost: int,
-        sell_cost: int,
-        shot_speed: int,
-        shot_damage: int,
-        shooting_speed: int,
-        range_radius: int,
-        game_map: GameMap
+            self,
+            position: Point,
+            image: str,
+            cost: int,
+            sell_cost: int,
+            shot_speed: int,
+            shot_damage: int,
+            shooting_speed: int,
+            range_radius: int,
+            game_map: GameMap
     ):
         super().__init__(position, Direction(True, INITIAL_ANGLE), image)
         self._cost = cost
         self._sell_cost = sell_cost
         self._shot_speed = shot_speed
         self._shot_damage = shot_damage
-        self._shooting_speed = shooting_speed
+        self._shooting_speed = shooting_speed  # The smaller, the faster
         self._range_radius = range_radius
         self._is_pressed = False
         self._is_set = False
+        self.last_shot_time = 0
         self._game_map = game_map
         self._balloons_in_range = []
 
@@ -69,9 +73,11 @@ class Tower(Drawable):
         return self._range_radius >= self._position.get_distance(balloon.get_position())
 
     def activate(self):
+        current_time = pygame.time.get_ticks()
         self.add_to_balloons_in_range()
-        first_balloon = self.get_first_balloon()
-        self.shoot_balloon(first_balloon)
+        if self._balloons_in_range and current_time - self.last_shot_time > self._shooting_speed:
+            first_balloon = self.get_first_balloon()
+            self.shoot_balloon(first_balloon)
 
     def add_to_balloons_in_range(self):
         for balloon in self._game_map.get_balloons().sprites():
@@ -82,12 +88,22 @@ class Tower(Drawable):
         return max(self._balloons_in_range, key=lambda balloon: balloon.get_route_progress())
 
     def shoot_balloon(self, balloon: Balloon):
+        """
+        The function takes a balloon and shoots a dart towards that balloon
+        :param balloon:
+        :return:
+        """
+        self.last_shot_time = pygame.time.get_ticks()
+        direction = self._position.calc_angle_to_point(balloon.get_position())
         dart = Dart(
             self._position,
-            self._direction.value,
+            direction,
+            balloon.get_position(),
             self._range_radius,
             self._shot_damage,
             self._shot_speed,
             self._game_map)
+        self.set_direction_value(direction)
+        self._game_map.add_shot(dart)
 
-        dart.activate()
+
