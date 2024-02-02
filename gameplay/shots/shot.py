@@ -1,3 +1,4 @@
+import math
 import pygame
 from utils.drawable import Drawable
 from utils.point import Point
@@ -25,8 +26,9 @@ class Shot(Drawable):
         self._damage = damage
         self._speed = speed
         self._progress = 0
-        self.last_moving_time = 0
-        self.last_move = Axis.X
+        self._last_moving_time = 0
+        self._y_counter = 0.0
+        self._y_progress = 0         # real y progress
         self._game_map = game_map
 
     def get_damage(self):
@@ -35,7 +37,7 @@ class Shot(Drawable):
     def activate(self):
         current_time = pygame.time.get_ticks()
         self.check_collisions()
-        if current_time - self.last_moving_time > COOLDOWN_TIME:
+        if current_time - self._last_moving_time > COOLDOWN_TIME:
             self.move()
             if self._progress > self._shot_range:
                 self._game_map.remove_shot(self)
@@ -50,45 +52,23 @@ class Shot(Drawable):
                 self._game_map.remove_shot(self)
 
     def move(self):
-        count_x = 0
-        count_y = 0
-        final_x = self._destination.get_x() - self._position.get_x()
-        final_y = self._destination.get_y() - self._position.get_y()
-        for i in range(self._speed):
-            if count_x == final_x and count_y == final_y:
-                count_x = 0
-                count_y = 0
-            if self.last_move == Axis.X:
-                if self.check_y_increasement(count_y, final_y):
-                    continue
-                self.check_x_increasement(count_x, final_x)
+        delta_x = self._destination.get_x() - self._position.get_x()
+        delta_y = self._destination.get_y() - self._position.get_y()
+        for _ in range(self._speed):
+            movement = self.single_move(delta_x, delta_y)
+            if movement in (Movement.PLUS_X, Movement.MINUS_X):
+                self.increase_x() if movement == Movement.PLUS_X else self.decrease_x()
             else:
-                if self.check_x_increasement(count_x, final_x):
-                    continue
-                self.check_y_increasement(count_y, final_y)
+                self.increase_y() if movement == Movement.PLUS_Y else self.decrease_y()
+                self._y_progress += 1 if movement == Movement.PLUS_Y else -1
 
-    def check_x_increasement(self, count_x: int, final_x: int):
-        if abs(count_x) < abs(final_x):
-            if final_x > 0:
-                self.increase_x()
-                count_x += 1
+    def single_move(self, delta_x: int, delta_y: int) -> Movement:
+        if delta_x != 0:
+            y_extension = delta_y / delta_x
+            if abs(self._y_progress) < abs(math.floor(self._y_counter)):
+                return Movement.PLUS_Y if delta_y > 0 else Movement.MINUS_Y
             else:
-                self.decrease_x()
-                count_x -= 1
-            self.last_move = Axis.X
-            self._progress += 1
-            return True
-        return False
-
-    def check_y_increasement(self, count_y: int, final_y: int):
-        if abs(count_y) < abs(final_y):
-            if final_y > 0:
-                self.increase_y()
-                count_y += 1
-            else:
-                self.decrease_y()
-                count_y -= 1
-            self.last_move = Axis.Y
-            self._progress += 1
-            return True
-        return False
+                self._y_counter += y_extension
+                return Movement.PLUS_X if delta_x > 0 else Movement.MINUS_X
+        else:
+            return Movement.PLUS_Y if delta_y > 0 else Movement.MINUS_Y

@@ -1,10 +1,10 @@
 from enum import Enum
 
-
 WINDOW_HEIGHT = 475
 WINDOW_WIDTH = 639
 INITIAL_ANGLE = 0
 COOLDOWN_TIME = 100
+
 
 # --------Dictionaries-------------
 
@@ -35,6 +35,8 @@ class Maps(Enum):
     MAP3 = 3
 
 
-class Axis(Enum):
-    X = 1
-    Y = 2
+class Movement(Enum):
+    PLUS_X = 1
+    PLUS_Y = 2
+    MINUS_X = 3
+    MINUS_Y = 4
