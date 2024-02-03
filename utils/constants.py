@@ -6,6 +6,21 @@ INITIAL_ANGLE = 0
 COOLDOWN_TIME = 100
 
 
+# --------Enumerations-------------
+
+class Maps(Enum):
+    MAP1 = 1
+    MAP2 = 2
+    MAP3 = 3
+
+
+class Movement(Enum):
+    PLUS_X = 1
+    PLUS_Y = 2
+    MINUS_X = 3
+    MINUS_Y = 4
+
+
 # --------Dictionaries-------------
 
 BALLOON_HP_TO_IMAGE = {
@@ -26,17 +41,6 @@ BALLOON_HP_TO_SPEED = {
     6: 6,
 }
 
-
-# --------Enumerations-------------
-
-class Maps(Enum):
-    MAP1 = 1
-    MAP2 = 2
-    MAP3 = 3
-
-
-class Movement(Enum):
-    PLUS_X = 1
-    PLUS_Y = 2
-    MINUS_X = 3
-    MINUS_Y = 4
+MAP_TO_ENCODED_MAP = {
+    Maps.MAP1: "gameplay/encoded_maps/encoded_map1.txt"
+}

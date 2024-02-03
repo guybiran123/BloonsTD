@@ -4,12 +4,15 @@ from gameplay.game import Game
 from towers.tower import Tower
 from shots.shot import Shot
 
+
 class GameMap:
     def __init__(self, game: Game, screen: pygame.surface.Surface):
         self.__balloons = pygame.sprite.Group()
         self.__towers = pygame.sprite.Group()
         self.__shots = pygame.sprite.Group()
         self.__game = game
+        self.route = []
+        self.make_route_list()
         self.__screen = screen
 
     def get_balloons(self):
@@ -41,3 +44,6 @@ class GameMap:
 
     def remove_shot(self, shot):
         self.__shots.remove(shot)
+
+    def make_route_list(self):
+        pass

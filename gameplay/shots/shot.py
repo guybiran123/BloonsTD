@@ -21,11 +21,11 @@ class Shot(Drawable):
             game_map: GameMap
     ):
         super().__init__(position, direction, image)
+        self._start_point = Point(position.get_x(), position.get_y())
         self._destination = destination
         self._shot_range = shot_range
         self._damage = damage
         self._speed = speed
-        self._progress = 0
         self._last_moving_time = 0
         self._y_counter = 0.0
         self._y_progress = 0         # real y progress
@@ -39,7 +39,7 @@ class Shot(Drawable):
         self.check_collisions()
         if current_time - self._last_moving_time > COOLDOWN_TIME:
             self.move()
-            if self._progress > self._shot_range:
+            if self._position.get_distance(self._start_point) > self._shot_range:
                 self._game_map.remove_shot(self)
 
     def check_collisions(self):
