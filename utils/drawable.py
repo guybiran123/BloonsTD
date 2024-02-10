@@ -1,6 +1,6 @@
 import pygame
-from point import Point
-from direction import Direction
+from utils.point import Point
+from utils.direction import Direction
 
 
 class Drawable(pygame.sprite.Sprite):

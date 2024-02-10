@@ -1,6 +1,9 @@
 import pygame
 import sys
 import math
+from gameplay.game import Game
+from gameplay.game_map import GameMap
+from utils.constants import *
 
 def calc_angle_to_point(point1, point2):
     print(point1, "\n", point2)
@@ -39,6 +42,9 @@ angle = 0
 
 # Game loop
 running = True
+game = Game(Maps.MAP1, 20)
+game_map = GameMap(game, screen)
+print(game_map.get_route_positions())
 while running:
     rotated_image = pygame.transform.rotate(image, angle)
     for event in pygame.event.get():

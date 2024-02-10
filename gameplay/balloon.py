@@ -3,7 +3,7 @@ from utils.drawable import Drawable
 from utils.direction import Direction
 from utils.point import Point
 from utils.constants import *
-from game_map import GameMap
+from gameplay.game_map import GameMap
 
 
 class Balloon(Drawable):
