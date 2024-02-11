@@ -63,7 +63,6 @@ while running:
     screen.blit(rotated_image, (width/2 - rotated_image.get_width()/2, height/2 - rotated_image.get_height()/2))
 
     for position in game_map.get_route_positions():
-        position = position[Y], position[X]
         pygame.draw.rect(screen, (0, 0, 0), (*position, 1, 1))
 
     # Update the display

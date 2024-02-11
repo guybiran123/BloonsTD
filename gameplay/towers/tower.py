@@ -1,4 +1,3 @@
-import threading
 import pygame
 from utils.point import Point
 from gameplay.game_map import GameMap

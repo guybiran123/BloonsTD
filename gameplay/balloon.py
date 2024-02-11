@@ -8,11 +8,15 @@ from gameplay.game_map import GameMap
 
 class Balloon(Drawable):
 
-    def __init__(self, position: Point, hp: int, game_map: GameMap):
-        super().__init__(position, Direction(False, INITIAL_ANGLE), BALLOON_HP_TO_IMAGE[hp])
+    def __init__(self, hp: int, game_map: GameMap):
+        route_positions = game_map.get_route_positions()
+        super().__init__(Point(route_positions[0][X], route_positions[0][Y]),
+                         Direction(False, INITIAL_ANGLE),
+                         BALLOON_HP_TO_IMAGE[hp])
         self.__hp = hp
         self.__speed = BALLOON_HP_TO_SPEED[self.__hp]
         self.__route_progress = 0
+        self.__last_moving_time = 0
         self.__game_map = game_map
 
     def get_hp(self):
@@ -34,3 +38,19 @@ class Balloon(Drawable):
 
     def explode(self):
         self.__game_map.balloon_exploded(self)
+
+    def activate(self):
+        current_time = pygame.time.get_ticks()
+        if current_time - self.__last_moving_time > COOLDOWN_TIME:
+            self.move()
+
+    def move(self):
+        route_positions = self.__game_map.get_route_positions()
+        self.__route_progress += self.__speed
+        if self.__route_progress >= len(route_positions):
+            self.finish_route()
+        else:
+            self.set_position(Point(route_positions[self.__route_progress][X], route_positions[self.__route_progress][Y]))
+
+    def finish_route(self):
+        self.__game_map.balloon_finished(self)

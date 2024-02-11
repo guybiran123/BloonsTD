@@ -20,6 +20,9 @@ class Game:
     def add_money(self, value):
         self.__money += value
 
+    def lose_lives(self, value):
+        self.__lives -= value
+
     def make_encoded_map_list(self):
         try:
             with open(MAP_TO_ENCODED_MAP[self.__map_level], 'r') as file:

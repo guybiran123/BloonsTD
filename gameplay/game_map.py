@@ -44,42 +44,46 @@ class GameMap:
     def balloon_exploded(self, balloon):
         self.__balloons.remove(balloon)
 
+    def balloon_finished(self, balloon):
+        self.__game.lose_lives(balloon.get_hp())
+        self.__balloons.remove(balloon)
+
     def remove_shot(self, shot):
         self.__shots.remove(shot)
 
     def add_route_starting_point_to_list(self):
         encoded_map_list = self.__game.get_encoded_map_list()
-        break_loop = False
         for row in range(len(encoded_map_list)):
             for col in range(len(encoded_map_list[row])):
                 if encoded_map_list[row][col] == ROUTE_START:
-                    self.__route_positions.append((row, col))
-                    break_loop = True
-                    break
-            if break_loop:
-                break
+                    self.__route_positions.append((col, row))
+                    return
 
     def is_roads_collision_near(self, current_position, encoded_map_list):
-        if encoded_map_list[current_position[X]][current_position[Y]] == ROUTE:
+        if encoded_map_list[current_position[Y]][current_position[X]] == ROUTE:
             for neigh in BLOCKS_SURROUNDINGS:
-                if encoded_map_list[current_position[X] + neigh[X]][current_position[Y] + neigh[Y]] == ROADS_COLLISIONS:
+                if encoded_map_list[current_position[Y] + neigh[Y]][current_position[X] + neigh[X]] == ROADS_COLLISIONS:
                     return current_position[X] + neigh[X], current_position[Y] + neigh[Y]
         return NOT_FOUND
 
     def get_next_route_position(self, current_position, encoded_map_list):
-        if encoded_map_list[current_position[X]][current_position[Y]] == ROUTE_START:
+        if encoded_map_list[current_position[Y]][current_position[X]] == ROUTE_START:
             for neigh in BLOCKS_SURROUNDINGS:
-                if 0 <= current_position[X] + neigh[X] < len(encoded_map_list) and \
-                        0 <= current_position[Y] + neigh[Y] < len(encoded_map_list[0]):
-                    if encoded_map_list[current_position[X] + neigh[X]][current_position[Y] + neigh[Y]] == ROUTE:
+                if 0 <= current_position[Y] + neigh[Y] < len(encoded_map_list) and \
+                        0 <= current_position[X] + neigh[X] < len(encoded_map_list[0]):
+                    if encoded_map_list[current_position[Y] + neigh[Y]][current_position[X] + neigh[X]] == ROUTE:
                         return current_position[X] + neigh[X], current_position[Y] + neigh[Y]
-        elif encoded_map_list[current_position[X]][current_position[Y]] == ROUTE:
+
+        elif encoded_map_list[current_position[Y]][current_position[X]] == ROUTE:
             for neigh in BLOCKS_SURROUNDINGS:
-                if encoded_map_list[current_position[X] + neigh[X]][current_position[Y] + neigh[Y]] in [ROUTE, ROUTE_END] and (current_position[X] + neigh[X], current_position[Y] + neigh[Y]) != self.__route_positions[len(self.__route_positions) - 2]:
+                if encoded_map_list[current_position[Y] + neigh[Y]][current_position[X] + neigh[X]]\
+                        in [ROUTE, ROUTE_END] and (current_position[X] + neigh[X], current_position[Y] + neigh[Y])\
+                        != self.__route_positions[len(self.__route_positions) - 2]:
                     return current_position[X] + neigh[X], current_position[Y] + neigh[Y]
-        elif encoded_map_list[current_position[X]][current_position[Y]] == ROADS_COLLISIONS:
+
+        elif encoded_map_list[current_position[Y]][current_position[X]] == ROADS_COLLISIONS:
             for neigh in BLOCKS_SURROUNDINGS:
-                if encoded_map_list[current_position[X] + neigh[X]][current_position[Y] + neigh[Y]]\
+                if encoded_map_list[current_position[Y] + neigh[Y]][current_position[X] + neigh[X]]\
                         == 10 + self.__roads_collisions_counter:
                     self.__roads_collisions_counter += 1
                     return current_position[X] + neigh[X], current_position[Y] + neigh[Y]
@@ -88,7 +92,7 @@ class GameMap:
         self.add_route_starting_point_to_list()
         current_position = self.__route_positions[len(self.__route_positions) - 1]
         encoded_map_list = self.__game.get_encoded_map_list()
-        while encoded_map_list[current_position[X]][current_position[Y]] != ROUTE_END:
+        while encoded_map_list[current_position[Y]][current_position[X]] != ROUTE_END:
             if MAP_HAS_ROADS_COLLISIONS[self.__game.get_map_level()]:
                 collision_pos = self.is_roads_collision_near(current_position, encoded_map_list)
                 if collision_pos != NOT_FOUND:

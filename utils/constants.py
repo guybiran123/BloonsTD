@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-# ---General_magic_numbers---------
+# -----General_magic_numbers-------
 
 X = 0
 Y = 1
@@ -23,7 +23,21 @@ ROADS_COLLISIONS = '5'
 WATER = '6'
 
 
-# --------Lists--------------------
+# ---------Towers-stats------------
+
+# ---Dart-monkey-----
+DART_MONKEY_IMAGE = r'images/Towers/Dart_monkey_image.png'
+DART_MONKEY_COST = 250
+DART_MONKEY_SELL_COST = 200
+DART_MONKEY_SHOT_SPEED = 10
+DART_MONKEY_SHOT_DAMAGE = 1
+DART_MONKEY_SHOOTING_SPEED = 10
+DART_MONKEY_RANGE_RADIUS = 100
+
+
+
+
+# ------------Lists----------------
 
 BLOCKS_SURROUNDINGS = [(-1, -1), (0, -1), (1, -1),
                        (-1, 0),           (1, 0),
