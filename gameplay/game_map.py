@@ -95,7 +95,5 @@ class GameMap:
                     self.__route_positions.append(collision_pos)
                     continue
             self.__route_positions.append(self.get_next_route_position(current_position, encoded_map_list))
-            if self.__route_positions[len(self.__route_positions) - 1] == None:
-                print("d")
             current_position = self.__route_positions[len(self.__route_positions) - 1]
 
