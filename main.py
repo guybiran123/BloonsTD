@@ -1,81 +1,60 @@
 import pygame
 import sys
-import math
 from gameplay.game import Game
 from gameplay.game_map import GameMap
+from gameplay.towers.dart_monkey import DartMonkey
+from gameplay.balloon import Balloon
+from utils.point import Point
 from utils.constants import *
 
-def calc_angle_to_point(point1, point2):
-    print(point1, "\n", point2)
-    x1, y1 = point1
-    x2, y2 = point2
 
-    # Calculate the differences in coordinates
-    dx = x2 - x1
-    dy = y2 - y1
+def main():
+    pygame.init()
 
-    # Use atan2 to calculate the angle
-    angle_rad = math.atan2(dy, dx)
+    screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+    pygame.display.set_caption("Bloons TD")
 
-    # Convert the angle to degrees
-    angle_deg = math.degrees(angle_rad)
-    # Ensure the angle is positive
-    if angle_deg < 0:
-        angle_deg += 360
+    running = True
+    game = Game(Maps.MAP1, 20)
+    game_map = GameMap(game, screen)
+    image = pygame.image.load(MAP_TO_IMAGE[Maps.MAP1])
+    clock = pygame.time.Clock()
 
-    return -angle_deg - 90
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                mouse_pos = pygame.mouse.get_pos()
+                mouse_pos_point = Point(mouse_pos[X], mouse_pos[Y])
+                game_map.add_tower(DartMonkey(mouse_pos_point, game_map))
+                game_map.add_balloon(Balloon(1, game_map))
 
+        screen.blit(image, (0, 0))
+        activate_drawables(game_map)
+        draw_drawables(game_map, screen)
+        pygame.display.flip()
 
-# Initialize Pygame
-pygame.init()
+        clock.tick(REFRESH_RATE)
 
-# Set up display
-width, height = 800, 600
-screen = pygame.display.set_mode((width, height))
-pygame.display.set_caption("Rotate Example")
-
-# Load an image
-image = pygame.image.load(r"C:\Users\guybi\PycharmProjects\BloonsTD\images\Towers\Dart_monkey_image.png")
-
-# Initial rotation angle (in degrees)
-angle = 0
-
-# Game loop
-running = True
-game = Game(Maps.MAP1, 20)
-game_map = GameMap(game, screen)
-print(game_map.get_route_positions())
-while running:
-    rotated_image = pygame.transform.rotate(image, angle)
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            angle = calc_angle_to_point((width/2, height/2), pygame.mouse.get_pos())
-            print(angle)
-    # Rotate the image
-    rotated_image = pygame.transform.rotate(image, angle)
-
-    # Clear the screen
-    screen.fill((255, 255, 255))
-
-    # Draw the rotated image
-    screen.blit(rotated_image, (width/2 - rotated_image.get_width()/2, height/2 - rotated_image.get_height()/2))
-
-    for position in game_map.get_route_positions():
-        pygame.draw.rect(screen, (0, 0, 0), (*position, 1, 1))
-
-    # Update the display
-    pygame.display.flip()
-
-    # Increment rotation angle
+    pygame.quit()
+    sys.exit()
 
 
-    # Control the speed of rotation
-    pygame.time.delay(10)
-
-# Quit Pygame
-pygame.quit()
-sys.exit()
+def draw_drawables(game_map: GameMap, screen: pygame.surface.Surface):
+    game_map.get_balloons().draw(screen)
+    game_map.get_towers().draw(screen)
+    game_map.get_shots().draw(screen)
 
 
+def activate_drawables(game_map: GameMap):
+    for balloon in game_map.get_balloons():
+        balloon.activate()
+    for tower in game_map.get_towers():
+        tower.activate()
+    for shot in game_map.get_shots():
+        shot.activate()
+
+
+if __name__ == '__main__':
+    main()

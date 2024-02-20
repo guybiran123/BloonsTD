@@ -1,4 +1,4 @@
-from shot import Shot
+from gameplay.shots.shot import Shot
 from utils.point import Point
 from utils.direction import Direction
 from gameplay.game_map import GameMap

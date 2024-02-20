@@ -1,16 +1,15 @@
 from enum import Enum
 
-
 # -----General_magic_numbers-------
 
 X = 0
 Y = 1
 WINDOW_HEIGHT = 475
 WINDOW_WIDTH = 639
+REFRESH_RATE = 60
 INITIAL_ANGLE = 0
 COOLDOWN_TIME = 100
 NOT_FOUND = 0
-
 
 # -----Encoded-map-decoding--------
 
@@ -21,7 +20,6 @@ ROUTE_START = '3'
 ROUTE_END = '4'
 ROADS_COLLISIONS = '5'
 WATER = '6'
-
 
 # ---------Towers-stats------------
 
@@ -34,14 +32,11 @@ DART_MONKEY_SHOT_DAMAGE = 1
 DART_MONKEY_SHOOTING_SPEED = 10
 DART_MONKEY_RANGE_RADIUS = 100
 
-
-
-
 # ------------Lists----------------
 
 BLOCKS_SURROUNDINGS = [(-1, -1), (0, -1), (1, -1),
-                       (-1, 0),           (1, 0),
-                       (-1, 1),  (0, 1),  (1, 1)]
+                       (-1, 0), (1, 0),
+                       (-1, 1), (0, 1), (1, 1)]
 
 
 # --------Enumerations-------------
@@ -80,7 +75,11 @@ BALLOON_HP_TO_SPEED = {
 }
 
 MAP_TO_ENCODED_MAP = {
-    Maps.MAP1: r"gameplay/encoded_maps/encoded_map1.txt"
+    Maps.MAP1: r'gameplay/encoded_maps/encoded_map1.txt'
+}
+
+MAP_TO_IMAGE = {
+    Maps.MAP1: r'images/Maps/Map1_image.png'
 }
 
 MAP_HAS_ROADS_COLLISIONS = {
