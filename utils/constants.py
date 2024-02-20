@@ -8,7 +8,7 @@ WINDOW_HEIGHT = 475
 WINDOW_WIDTH = 639
 REFRESH_RATE = 60
 INITIAL_ANGLE = 0
-COOLDOWN_TIME = 100
+COOLDOWN_TIME = 30
 NOT_FOUND = 0
 
 # -----Encoded-map-decoding--------
@@ -29,7 +29,7 @@ DART_MONKEY_COST = 250
 DART_MONKEY_SELL_COST = 200
 DART_MONKEY_SHOT_SPEED = 10
 DART_MONKEY_SHOT_DAMAGE = 1
-DART_MONKEY_SHOOTING_SPEED = 10
+DART_MONKEY_SHOOTING_SPEED = 1000
 DART_MONKEY_RANGE_RADIUS = 100
 
 # ------------Lists----------------
@@ -66,12 +66,12 @@ BALLOON_HP_TO_IMAGE = {
 }
 
 BALLOON_HP_TO_SPEED = {
-    1: 1,
-    2: 2,
-    3: 3,
-    4: 4,
-    5: 5,
-    6: 6,
+    1: 2,
+    2: 3,
+    3: 4,
+    4: 5,
+    5: 6,
+    6: 7,
 }
 
 MAP_TO_ENCODED_MAP = {

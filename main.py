@@ -19,6 +19,7 @@ def main():
     game_map = GameMap(game, screen)
     image = pygame.image.load(MAP_TO_IMAGE[Maps.MAP1])
     clock = pygame.time.Clock()
+    counter = 0
 
     while running:
         for event in pygame.event.get():
@@ -27,7 +28,9 @@ def main():
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 mouse_pos = pygame.mouse.get_pos()
                 mouse_pos_point = Point(mouse_pos[X], mouse_pos[Y])
-                game_map.add_tower(DartMonkey(mouse_pos_point, game_map))
+                monkey = DartMonkey(mouse_pos_point, game_map)
+                game_map.add_tower(monkey)
+                counter = counter + 1 if counter < 6 else 1
                 game_map.add_balloon(Balloon(1, game_map))
 
         screen.blit(image, (0, 0))
@@ -48,11 +51,11 @@ def draw_drawables(game_map: GameMap, screen: pygame.surface.Surface):
 
 
 def activate_drawables(game_map: GameMap):
-    for balloon in game_map.get_balloons():
+    for balloon in game_map.get_balloons().sprites():
         balloon.activate()
-    for tower in game_map.get_towers():
+    for tower in game_map.get_towers().sprites():
         tower.activate()
-    for shot in game_map.get_shots():
+    for shot in game_map.get_shots().sprites():
         shot.activate()
 
 

@@ -45,6 +45,7 @@ class Balloon(Drawable):
             self.move()
 
     def move(self):
+        self.__last_moving_time = pygame.time.get_ticks()
         route_positions = self.__game_map.get_route_positions()
         self.__route_progress += self.__speed
         if self.__route_progress >= len(route_positions):

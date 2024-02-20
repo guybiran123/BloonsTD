@@ -79,12 +79,3 @@ class Drawable(pygame.sprite.Sprite):
 
     def set_does_direction_matter(self, does_matter: bool):
         self._direction.does_matter = does_matter
-
-
-
-
-
-
-
-
-
