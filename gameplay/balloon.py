@@ -32,7 +32,7 @@ class Balloon(Drawable):
         self.__game_map.add_money(min(damage, self.__hp))
         self.__hp -= damage
         if self.__hp > 0:
-            self.image = BALLOON_HP_TO_IMAGE[self.__hp]
+            self.change_image(BALLOON_HP_TO_IMAGE[self.__hp])
         else:
             self.explode()
 

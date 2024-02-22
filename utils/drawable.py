@@ -1,6 +1,7 @@
 import pygame
 from utils.point import Point
 from utils.direction import Direction
+from utils.constants import *
 
 
 class Drawable(pygame.sprite.Sprite):
@@ -9,8 +10,10 @@ class Drawable(pygame.sprite.Sprite):
         self._position = position
         self._direction = direction
         self._original_image = pygame.image.load(image).convert()
+        self._original_image.set_colorkey(COLOR_KEY)
         self.image = self._original_image.copy()
         self.rect = self.image.get_rect()
+        self.rotate_image()
         self.align_rect_to_pos()
 
     def align_rect_to_pos(self):
@@ -20,6 +23,11 @@ class Drawable(pygame.sprite.Sprite):
         if self._direction.does_matter:
             self.image = pygame.transform.rotate(self._original_image, self._direction.value)
             self.align_rect_to_pos()
+
+    def change_image(self, image: str):
+        self._original_image = pygame.image.load(image).convert()
+        self._original_image.set_colorkey(COLOR_KEY)
+        self.image = self._original_image.copy()
 
     def get_position(self):
         return self._position

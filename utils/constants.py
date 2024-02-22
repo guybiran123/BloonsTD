@@ -2,6 +2,8 @@ from enum import Enum
 
 # -----General_magic_numbers-------
 
+COLOR_KEY = (20, 250, 250)
+
 X = 0
 Y = 1
 WINDOW_HEIGHT = 475
@@ -24,11 +26,11 @@ WATER = '6'
 # ---------Towers-stats------------
 
 # ---Dart-monkey-----
-DART_MONKEY_IMAGE = r'images/Towers/Dart_monkey_image.png'
+DART_MONKEY_IMAGE = r'images/Towers/dart_monkey_image.png'
 DART_MONKEY_COST = 250
 DART_MONKEY_SELL_COST = 200
-DART_MONKEY_SHOT_SPEED = 10
-DART_MONKEY_SHOT_DAMAGE = 1
+DART_MONKEY_SHOT_SPEED = 15
+DART_MONKEY_SHOT_DAMAGE = 2
 DART_MONKEY_SHOOTING_SPEED = 1000
 DART_MONKEY_RANGE_RADIUS = 100
 
@@ -57,12 +59,12 @@ class Movement(Enum):
 # --------Dictionaries-------------
 
 BALLOON_HP_TO_IMAGE = {
-    1: "images/Balloons/Red_balloon_image.png",
-    2: "images/Balloons/Blue_balloon_image.png",
-    3: "images/Balloons/Green_balloon_image.png",
-    4: "images/Balloons/Yellow_balloon_image.png",
-    5: "images/Balloons/Black_balloon_image.png",
-    6: "images/Balloons/White_balloon_image.png",
+    1: "images/Balloons/red_balloon.png",
+    2: "images/Balloons/blue_balloon.png",
+    3: "images/Balloons/green_balloon.png",
+    4: "images/Balloons/yellow_balloon.png",
+    5: "images/Balloons/black_balloon.png",
+    6: "images/Balloons/white_balloon.png",
 }
 
 BALLOON_HP_TO_SPEED = {

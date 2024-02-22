@@ -44,7 +44,8 @@ class Shot(Drawable):
 
     def check_collisions(self):
         hit_balloons = pygame.sprite.spritecollide(self, self._game_map.get_balloons(), False)
-        for balloon in hit_balloons:
+        if hit_balloons:
+            balloon = hit_balloons[0]
             balloons_hp = balloon.get_hp()
             balloon.hit(self._damage)
             self._damage -= balloons_hp

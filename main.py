@@ -25,13 +25,15 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            if event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_pos = pygame.mouse.get_pos()
                 mouse_pos_point = Point(mouse_pos[X], mouse_pos[Y])
-                monkey = DartMonkey(mouse_pos_point, game_map)
-                game_map.add_tower(monkey)
-                counter = counter + 1 if counter < 6 else 1
-                game_map.add_balloon(Balloon(1, game_map))
+                if event.button == 1:
+                    monkey = DartMonkey(mouse_pos_point, game_map)
+                    game_map.add_tower(monkey)
+                elif event.button == 3:
+                    counter = counter + 1 if counter < 6 else 1
+                    game_map.add_balloon(Balloon(counter, game_map))
 
         screen.blit(image, (0, 0))
         activate_drawables(game_map)

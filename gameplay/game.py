@@ -17,7 +17,7 @@ class Game:
     def get_encoded_map_list(self):
         return self.__encoded_map_list
 
-    def add_money(self, value):
+    def add_money(self, value: int):
         self.__money += value
 
     def lose_lives(self, value):
