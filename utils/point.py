@@ -46,3 +46,9 @@ class Point:
             angle_deg += 360
 
         return -angle_deg - 90
+
+    def find_point_with_distance_and_angle(self, angle: float, distance: int):    # function doesn't work
+        angle = -angle - 90
+        new_x = self.__x + math.cos(angle) * distance
+        new_y = self.__y + math.sin(angle) * distance
+        return Point(new_x, new_y)

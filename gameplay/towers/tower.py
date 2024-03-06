@@ -34,7 +34,7 @@ class Tower(Drawable):
         self._range_radius = range_radius
         self._is_pressed = False
         self._is_set = False
-        self.last_shot_time = 0
+        self._last_shot_time = 0
         self._game_map = game_map
         self._balloons_in_range = []
 
@@ -74,7 +74,7 @@ class Tower(Drawable):
     def activate(self):
         current_time = pygame.time.get_ticks()
         self.add_to_balloons_in_range()
-        if self._balloons_in_range and current_time - self.last_shot_time > self._shooting_speed:
+        if self._balloons_in_range and current_time - self._last_shot_time > self._shooting_speed:
             first_balloon = self.get_first_balloon()
             self.shoot_balloon(first_balloon)
 
@@ -93,7 +93,7 @@ class Tower(Drawable):
         :param balloon:
         :return:
         """
-        self.last_shot_time = pygame.time.get_ticks()
+        self._last_shot_time = pygame.time.get_ticks()
         direction = self._position.calc_angle_to_point(balloon.get_position())
         dart = Dart(
             Point(self._position.get_x(), self._position.get_y()),

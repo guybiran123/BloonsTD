@@ -39,7 +39,7 @@ class Shot(Drawable):
         self.check_collisions()
         if current_time - self._last_moving_time > COOLDOWN_TIME:
             self.move()
-            if self._position.get_distance(self._start_point) > self._shot_range:
+            if self._position.get_distance(self._start_point) >= self._shot_range:
                 self._game_map.remove_shot(self)
 
     def check_collisions(self):
@@ -53,8 +53,8 @@ class Shot(Drawable):
                 self._game_map.remove_shot(self)
 
     def move(self):
-        delta_x = self._destination.get_x() - self._position.get_x()
-        delta_y = self._destination.get_y() - self._position.get_y()
+        delta_x = self._destination.get_x() - self._start_point.get_x()
+        delta_y = self._destination.get_y() - self._start_point.get_y()
         for _ in range(self._speed):
             movement = self.single_move(delta_x, delta_y)
             if movement in (Movement.PLUS_X, Movement.MINUS_X):
