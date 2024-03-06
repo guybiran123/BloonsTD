@@ -13,15 +13,26 @@ class Drawable(pygame.sprite.Sprite):
         self._original_image.set_colorkey(COLOR_KEY)
         self.image = self._original_image.copy()
         self.rect = self.image.get_rect()
+        self.original_center = self.rect.center
         self.rotate_image()
         self.align_rect_to_pos()
 
     def align_rect_to_pos(self):
         self.rect.center = self._position.get_x(), self._position.get_y()
+        rotated_rect = self.image.get_rect()
+        offset = (self.original_center[0] - rotated_rect.centerx,
+                  self.original_center[1] - rotated_rect.centery)
+        self.rect.x += offset[0]
+        self.rect.y += offset[1]
 
     def rotate_image(self):
         if self._direction.does_matter:
             self.image = pygame.transform.rotate(self._original_image, self._direction.value)
+            rotated_rect = self.image.get_rect()
+            offset = (self.original_center[0] - rotated_rect.centerx,
+                      self.original_center[1] - rotated_rect.centery)
+            self.rect.x += offset[0]
+            self.rect.y += offset[1]
             self.align_rect_to_pos()
 
     def change_image(self, image: str):

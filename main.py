@@ -30,7 +30,7 @@ def main():
                 mouse_pos = pygame.mouse.get_pos()
                 mouse_pos_point = Point(mouse_pos[X], mouse_pos[Y])
                 if event.button == 1:
-                    monkey = TackTower(mouse_pos_point, game_map)
+                    monkey = DartMonkey(mouse_pos_point, game_map)
                     game_map.add_tower(monkey)
                 elif event.button == 3:
                     counter = counter + 1 if counter < 6 else 1
