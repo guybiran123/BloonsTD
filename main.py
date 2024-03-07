@@ -4,6 +4,7 @@ from gameplay.game import Game
 from gameplay.game_map import GameMap
 from gameplay.towers.dart_monkey import DartMonkey
 from gameplay.towers.tack_tower import TackTower
+from gameplay.towers.supermonkey import SuperMonkey
 from gameplay.balloon import Balloon
 from utils.point import Point
 from utils.constants import *

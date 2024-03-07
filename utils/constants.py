@@ -23,10 +23,16 @@ ROUTE_END = '4'
 ROADS_COLLISIONS = '5'
 WATER = '6'
 
+# ------------Images---------------
+DART_IMAGE = r'images/Shots/dart_image.png'
+TACK_IMAGE = r'images/Shots/tack_image.png'
+DART_MONKEY_IMAGE = r'images/Towers/dart_monkey_image.png'
+TACK_TOWER_IMAGE = r'images/Towers/tack_tower_image.png'
+SUPER_MONKEY_IMAGE = r'images/Towers/supermonkey_image.png'
+
 # ---------Towers-stats------------
 
 # ---Dart-monkey-----
-DART_MONKEY_IMAGE = r'images/Towers/dart_monkey_image.png'
 DART_MONKEY_COST = 250
 DART_MONKEY_SELL_COST = 200
 DART_MONKEY_SHOT_SPEED = 15
@@ -35,14 +41,20 @@ DART_MONKEY_SHOOTING_SPEED = 650
 DART_MONKEY_RANGE_RADIUS = 100
 
 # ---Tack-tower-----
-TACK_TOWER_IMAGE = r'images/Towers/tack_tower_image.png'
 TACK_TOWER_COST = 400
 TACK_TOWER_SELL_COST = 320
-TACK_TOWER_SHOT_SPEED = 3 #15
+TACK_TOWER_SHOT_SPEED = 12
 TACK_TOWER_SHOT_DAMAGE = 1
 TACK_TOWER_SHOOTING_SPEED = 1100
-TACK_TOWER_RANGE_RADIUS = 700 #70
+TACK_TOWER_RANGE_RADIUS = 70
 
+# ---Super-monkey-----
+SUPER_MONKEY_COST = 4000
+SUPER_MONKEY_SELL_COST = 3200
+SUPER_MONKEY_SHOT_SPEED = 15
+SUPER_MONKEY_SHOT_DAMAGE = 1
+SUPER_MONKEY_SHOOTING_SPEED = 150
+SUPER_MONKEY_RANGE_RADIUS = 140
 
 # ------------Lists----------------
 

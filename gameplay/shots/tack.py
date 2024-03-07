@@ -2,6 +2,7 @@ from gameplay.shots.shot import Shot
 from utils.point import Point
 from utils.direction import Direction
 from gameplay.game_map import GameMap
+from utils.constants import *
 
 
 class Tack(Shot):
@@ -11,7 +12,7 @@ class Tack(Shot):
             position,
             Direction(True, direction),
             destination,
-            r'images/Shots/tack_image.png',
+            TACK_IMAGE,
             shot_range,
             damage,
             speed,

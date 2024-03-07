@@ -20,7 +20,7 @@ class TackTower(Tower):
                          TACK_TOWER_RANGE_RADIUS,
                          game_map)
 
-    def shoot_balloon(self, balloon: Balloon):  # function doesn't work
+    def shoot_balloon(self, balloon: Balloon):
         self._last_shot_time = pygame.time.get_ticks()
         for direction in range(0, 360, 45):
             tack = Tack(
