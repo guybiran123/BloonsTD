@@ -24,11 +24,20 @@ ROADS_COLLISIONS = '5'
 WATER = '6'
 
 # ------------Images---------------
+
+# -------Shots-------
 DART_IMAGE = r'images/Shots/dart_image.png'
 TACK_IMAGE = r'images/Shots/tack_image.png'
+BOMB_IMAGE = r'images/Shots/bomb_image.png'
+
+# ------Towers-------
 DART_MONKEY_IMAGE = r'images/Towers/dart_monkey_image.png'
 TACK_TOWER_IMAGE = r'images/Towers/tack_tower_image.png'
+BOMB_TOWER_IMAGE = r'images/Towers/bomb_tower_image.png'
+ICE_TOWER_IMAGE = r'images/Towers/ice_tower_image.png'
 SUPER_MONKEY_IMAGE = r'images/Towers/supermonkey_image.png'
+BOAT_IMAGE = r'images/Towers/boat_image.png'
+
 
 # ---------Towers-stats------------
 
@@ -53,7 +62,7 @@ SUPER_MONKEY_COST = 4000
 SUPER_MONKEY_SELL_COST = 3200
 SUPER_MONKEY_SHOT_SPEED = 15
 SUPER_MONKEY_SHOT_DAMAGE = 1
-SUPER_MONKEY_SHOOTING_SPEED = 150
+SUPER_MONKEY_SHOOTING_SPEED = 120
 SUPER_MONKEY_RANGE_RADIUS = 140
 
 # ------------Lists----------------
