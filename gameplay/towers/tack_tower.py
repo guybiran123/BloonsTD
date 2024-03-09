@@ -34,10 +34,3 @@ class TackTower(Tower):
             self._game_map.add_shot(tack)
 
 
-"""
-    def activate(self):
-        current_time = pygame.time.get_ticks()
-        self.add_to_balloons_in_range()
-        if self._balloons_in_range and current_time - self._last_shot_time > self._shooting_speed:
-            self.shoot_balloon()
-"""

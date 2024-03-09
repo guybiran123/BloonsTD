@@ -38,6 +38,9 @@ ICE_TOWER_IMAGE = r'images/Towers/ice_tower_image.png'
 SUPER_MONKEY_IMAGE = r'images/Towers/supermonkey_image.png'
 BOAT_IMAGE = r'images/Towers/boat_image.png'
 
+# -----Effects------
+EXPLOSION_IMAGE = r'images/Effects/explosion_image.png'
+
 
 # ---------Towers-stats------------
 
@@ -57,13 +60,26 @@ TACK_TOWER_SHOT_DAMAGE = 1
 TACK_TOWER_SHOOTING_SPEED = 1100
 TACK_TOWER_RANGE_RADIUS = 70
 
-# ---Super-monkey-----
+# ---Bomb-tower-----
+BOMB_TOWER_COST = 900
+BOMB_TOWER_SELL_COST = 720
+BOMB_TOWER_SHOT_SPEED = 4
+BOMB_TOWER_SHOT_DAMAGE = 3
+BOMB_TOWER_SHOOTING_SPEED = 1500
+BOMB_TOWER_RANGE_RADIUS = 120
+
+# ---Super-monkey---
 SUPER_MONKEY_COST = 4000
 SUPER_MONKEY_SELL_COST = 3200
 SUPER_MONKEY_SHOT_SPEED = 15
 SUPER_MONKEY_SHOT_DAMAGE = 1
 SUPER_MONKEY_SHOOTING_SPEED = 120
 SUPER_MONKEY_RANGE_RADIUS = 140
+
+
+# -------Effects_durations---------
+EXPLOSION_DURATION = 250
+
 
 # ------------Lists----------------
 

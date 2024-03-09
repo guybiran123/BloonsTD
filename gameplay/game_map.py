@@ -8,6 +8,7 @@ class GameMap:
         self.__balloons = pygame.sprite.Group()
         self.__towers = pygame.sprite.Group()
         self.__shots = pygame.sprite.Group()
+        self.__effects = pygame.sprite.Group()
         self.__game = game
         self.__route_positions = []
         self.make_route_positions()
@@ -31,6 +32,15 @@ class GameMap:
 
     def add_shot(self, shot):
         self.__shots.add(shot)
+
+    def get_effects(self):
+        return self.__effects
+
+    def add_effect(self, effect):
+        self.__effects.add(effect)
+
+    def remove_effect(self, effect):
+        self.__effects.remove(effect)
 
     def get_game(self):
         return self.__game

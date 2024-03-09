@@ -3,6 +3,7 @@ from utils.point import Point
 from gameplay.game_map import GameMap
 from utils.constants import *
 
+
 class DartMonkey(Tower):
 
     def __init__(self, position: Point, game_map: GameMap):
