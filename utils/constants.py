@@ -40,6 +40,7 @@ BOAT_IMAGE = r'images/Towers/boat_image.png'
 
 # -----Effects------
 EXPLOSION_IMAGE = r'images/Effects/explosion_image.png'
+POPPED_BALLOON_IMAGE = r'images/Effects/popped_balloon.png'
 
 
 # ---------Towers-stats------------
@@ -79,6 +80,7 @@ SUPER_MONKEY_RANGE_RADIUS = 140
 
 # -------Effects_durations---------
 EXPLOSION_DURATION = 250
+POPPED_BALLOON_DURATION = 100
 
 
 # ------------Lists----------------

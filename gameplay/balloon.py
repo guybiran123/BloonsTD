@@ -2,6 +2,7 @@ import pygame
 from utils.drawable import Drawable
 from utils.direction import Direction
 from utils.point import Point
+from gameplay.effects.Popped_balloon import PoppedBalloon
 from utils.constants import *
 from gameplay.game_map import GameMap
 
@@ -37,6 +38,7 @@ class Balloon(Drawable):
             self.explode()
 
     def explode(self):
+        self.__game_map.add_effect(PoppedBalloon(self._position, self.__game_map))
         self.__game_map.balloon_exploded(self)
 
     def activate(self):
