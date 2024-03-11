@@ -77,6 +77,15 @@ SUPER_MONKEY_SHOT_DAMAGE = 1
 SUPER_MONKEY_SHOOTING_SPEED = 120
 SUPER_MONKEY_RANGE_RADIUS = 140
 
+# -----Ice-tower-----
+ICE_TOWER_COST = 850
+ICE_TOWER_SELL_COST = 680
+ICE_TOWER_SHOT_SPEED = 0
+ICE_TOWER_SHOT_DAMAGE = 0
+ICE_TOWER_FREEZING_SPEED = 3000
+ICE_TOWER_RANGE_RADIUS = 80
+ICE_TOWER_FREEZING_DURATION = 1500
+
 
 # -------Effects_durations---------
 EXPLOSION_DURATION = 250
@@ -114,6 +123,15 @@ BALLOON_HP_TO_IMAGE = {
     4: "images/Balloons/yellow_balloon.png",
     5: "images/Balloons/black_balloon.png",
     6: "images/Balloons/white_balloon.png",
+}
+
+BALLOON_HP_TO_FROZEN_IMAGE = {
+    1: "images/Balloons/Frozen_Balloons/frozen_red_balloon.png",
+    2: "images/Balloons/Frozen_Balloons/frozen_blue_balloon.png",
+    3: "images/Balloons/Frozen_Balloons/frozen_green_balloon.png",
+    4: "images/Balloons/Frozen_Balloons/frozen_yellow_balloon.png",
+    5: "images/Balloons/Frozen_Balloons/frozen_black_balloon.png",
+
 }
 
 BALLOON_HP_TO_SPEED = {

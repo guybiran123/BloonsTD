@@ -18,6 +18,9 @@ class Balloon(Drawable):
         self.__speed = BALLOON_HP_TO_SPEED[self.__hp]
         self.__route_progress = 0
         self.__last_moving_time = 0
+        self.__is_frozen = False
+        self.__freezing_time = 0
+        self.__freezing_duration = 0
         self.__game_map = game_map
 
     def get_hp(self):
@@ -43,6 +46,7 @@ class Balloon(Drawable):
 
     def activate(self):
         current_time = pygame.time.get_ticks()
+        self.check_to_unfreeze()
         if current_time - self.__last_moving_time > COOLDOWN_TIME:
             self.move()
 
@@ -57,3 +61,22 @@ class Balloon(Drawable):
 
     def finish_route(self):
         self.__game_map.balloon_finished(self)
+
+    def freeze(self, freezing_duration: int):
+        if self.__hp != 6:
+            self.__is_frozen = True
+            self.__freezing_time = pygame.time.get_ticks()
+            self.__freezing_duration = freezing_duration
+            self.change_image(BALLOON_HP_TO_FROZEN_IMAGE[self.__hp])
+            self.__speed = 1
+
+    def unfreeze(self):
+        self.__is_frozen = False
+        self.change_image(BALLOON_HP_TO_IMAGE[self.__hp])
+        self.__speed = BALLOON_HP_TO_SPEED[self.__hp]
+
+    def check_to_unfreeze(self):
+        current_time = pygame.time.get_ticks()
+        if self.__is_frozen:
+            if current_time - self.__freezing_time > self.__freezing_duration:
+                self.unfreeze()
