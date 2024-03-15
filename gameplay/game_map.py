@@ -9,11 +9,11 @@ class GameMap:
         self.__towers = pygame.sprite.Group()
         self.__shots = pygame.sprite.Group()
         self.__effects = pygame.sprite.Group()
+        self.__roads_collisions_counter = 0
         self.__game = game
         self.__route_positions = []
         self.make_route_positions()
         self.__screen = screen
-        self.__roads_collisions_counter = 0
 
     def get_balloons(self):
         return self.__balloons
@@ -69,45 +69,55 @@ class GameMap:
                     self.__route_positions.append((col, row))
                     return
 
-    def is_roads_collision_near(self, current_position, encoded_map_list):
-        if encoded_map_list[current_position[Y]][current_position[X]] == ROUTE:
-            for neigh in BLOCKS_SURROUNDINGS:
-                if encoded_map_list[current_position[Y] + neigh[Y]][current_position[X] + neigh[X]] == ROADS_COLLISIONS:
-                    return current_position[X] + neigh[X], current_position[Y] + neigh[Y]
-        return NOT_FOUND
+    def get_next_route_position(self, current_position):
+        encoded_map_list = self.__game.get_encoded_map_list()
+        current_encoded_pixel = encoded_map_list[current_position[Y]][current_position[X]]
+        neighbors = self.get_neighbors(current_position)
 
-    def get_next_route_position(self, current_position, encoded_map_list):
-        if encoded_map_list[current_position[Y]][current_position[X]] == ROUTE_START:
-            for neigh in BLOCKS_SURROUNDINGS:
-                if 0 <= current_position[Y] + neigh[Y] < len(encoded_map_list) and \
-                        0 <= current_position[X] + neigh[X] < len(encoded_map_list[0]):
-                    if encoded_map_list[current_position[Y] + neigh[Y]][current_position[X] + neigh[X]] == ROUTE:
-                        return current_position[X] + neigh[X], current_position[Y] + neigh[Y]
+        if current_encoded_pixel == ROUTE_START:
+            for neighbor in neighbors:
+                if 0 <= neighbor[Y] < len(encoded_map_list) and \
+                        0 <= neighbor[X] < len(encoded_map_list[0]):
+                    if self.get_encoded_pixel_from_position(neighbor) == ROUTE:
+                        return neighbor
 
-        elif encoded_map_list[current_position[Y]][current_position[X]] == ROUTE:
-            for neigh in BLOCKS_SURROUNDINGS:
-                if encoded_map_list[current_position[Y] + neigh[Y]][current_position[X] + neigh[X]]\
-                        in [ROUTE, ROUTE_END] and (current_position[X] + neigh[X], current_position[Y] + neigh[Y])\
-                        != self.__route_positions[len(self.__route_positions) - 2]:
-                    return current_position[X] + neigh[X], current_position[Y] + neigh[Y]
+        elif current_encoded_pixel == ROUTE:
+            for neighbor in neighbors:
+                if (self.get_encoded_pixel_from_position(neighbor) in [ROUTE, ROUTE_END] and
+                    neighbor != self.__route_positions[len(self.__route_positions) - 2]) or \
+                        self.get_encoded_pixel_from_position(neighbor).isupper():
+                    return neighbor
 
-        elif encoded_map_list[current_position[Y]][current_position[X]] == ROADS_COLLISIONS:
-            for neigh in BLOCKS_SURROUNDINGS:
-                if encoded_map_list[current_position[Y] + neigh[Y]][current_position[X] + neigh[X]]\
-                        == 10 + self.__roads_collisions_counter:
-                    self.__roads_collisions_counter += 1
-                    return current_position[X] + neigh[X], current_position[Y] + neigh[Y]
+        elif current_encoded_pixel.islower():
+            for neighbor in neighbors:
+                if self.get_encoded_pixel_from_position(neighbor) == ROUTE:
+                    return neighbor
+
+        elif current_encoded_pixel == ROADS_COLLISIONS:
+            for neighbor in neighbors:
+                if self.get_encoded_pixel_from_position(neighbor) ==\
+                        self.get_encoded_pixel_from_position(
+                            self.__route_positions[len(self.__route_positions) - 2]
+                        ).lower():
+                    return neighbor
+
+        elif current_encoded_pixel.isupper():
+            for neighbor in neighbors:
+                if self.get_encoded_pixel_from_position(neighbor) == ROADS_COLLISIONS:
+                    return neighbor
 
     def make_route_positions(self):
         self.add_route_starting_point_to_list()
         current_position = self.__route_positions[len(self.__route_positions) - 1]
-        encoded_map_list = self.__game.get_encoded_map_list()
-        while encoded_map_list[current_position[Y]][current_position[X]] != ROUTE_END:
-            if MAP_HAS_ROADS_COLLISIONS[self.__game.get_map_level()]:
-                collision_pos = self.is_roads_collision_near(current_position, encoded_map_list)
-                if collision_pos != NOT_FOUND:
-                    self.__route_positions.append(collision_pos)
-                    continue
-            self.__route_positions.append(self.get_next_route_position(current_position, encoded_map_list))
+        while self.get_encoded_pixel_from_position(current_position) != ROUTE_END:
+            self.__route_positions.append(self.get_next_route_position(current_position))
             current_position = self.__route_positions[len(self.__route_positions) - 1]
 
+    def get_encoded_pixel_from_position(self, position: tuple):
+        return self.__game.get_encoded_map_list()[position[Y]][position[X]]
+
+    def get_neighbors(self, position: tuple):
+        return [
+            (position[X] + neighbor[X], position[Y] + neighbor[Y])
+            for neighbor in BLOCKS_SURROUNDINGS
+        ]
