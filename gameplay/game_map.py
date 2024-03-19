@@ -114,6 +114,7 @@ class GameMap:
             current_position = self.__route_positions[len(self.__route_positions) - 1]
 
     def get_encoded_pixel_from_position(self, position: tuple):
+        print(position)
         return self.__game.get_encoded_map_list()[position[Y]][position[X]]
 
     def get_neighbors(self, position: tuple):
