@@ -1,20 +1,28 @@
 import pygame
+from gameplay.buttons.button import Button
 from utils.constants import *
 
 
 class ScreenState:
 
-    def __init__(self, screen: pygame.surface.Surface):
+    def __init__(self, screen: pygame.surface.Surface, buttons_names: list):
         self._screen = screen
         self._buttons = pygame.sprite.Group()
-        self.add_buttons()
         self._background = pygame.image.load(HOME_SCREEN_IMAGE)
         self._change_screen_state = False  # tells if the screen state needs to be changed
+        self._text_boxes = []
         self._button_name_to_function = {}
+        self._buttons_names = buttons_names
+        self.add_buttons(self._buttons_names)
 
     def draw(self):
         self._screen.blit(self._background, (0, 0))
         self._buttons.draw(self._screen)
+        self.draw_text_boxes()
+
+    def draw_text_boxes(self):
+        for text_box in self._text_boxes:
+            text_box.draw(self._screen)
 
     def handle_events(self, event: pygame.event.Event):
         self.handle_button_clicks(event)
@@ -29,5 +37,12 @@ class ScreenState:
                     else:
                         print("No function found for button " + button.get_name())
 
-    def add_buttons(self):
-        pass
+    def add_buttons(self, buttons_names: list):
+        for button_name in buttons_names:
+            self._buttons.add(self.create_button_from_name(button_name))
+
+
+    def create_button_from_name(self, button_name: ButtonName):
+        return Button(BUTTON_TO_POSITION[button_name],
+                      BUTTON_TO_IMAGE[button_name],
+                      button_name)
