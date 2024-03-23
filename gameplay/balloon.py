@@ -11,7 +11,7 @@ class Balloon(Drawable):
 
     def __init__(self, hp: int, game_map: GameMap):
         route_positions = game_map.get_route_positions()
-        super().__init__(Point(route_positions[0][X], route_positions[0][Y]),
+        super().__init__(Point(route_positions[0]),
                          Direction(False, INITIAL_ANGLE),
                          BALLOON_HP_TO_IMAGE[hp])
         self.__hp = hp
@@ -57,7 +57,7 @@ class Balloon(Drawable):
         if self.__route_progress >= len(route_positions):
             self.finish_route()
         else:
-            self.set_position(Point(route_positions[self.__route_progress][X], route_positions[self.__route_progress][Y]))
+            self.set_position(Point(route_positions[self.__route_progress]))
 
     def finish_route(self):
         self.__game_map.balloon_finished(self)

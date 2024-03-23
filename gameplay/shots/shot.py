@@ -21,7 +21,7 @@ class Shot(Drawable):
             game_map: GameMap
     ):
         super().__init__(position, direction, image)
-        self._start_point = Point(position.get_x(), position.get_y())
+        self._start_point = Point((position.get_x(), position.get_y()))
         self._destination = destination
         self._shot_range = shot_range
         self._damage = damage

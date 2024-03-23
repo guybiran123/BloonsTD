@@ -33,7 +33,7 @@ class Tower(Drawable):
         self._shooting_speed = shooting_speed  # The smaller, the faster
         self._range_radius = range_radius
         self._is_pressed = False
-        self._is_set = False
+        self._is_set = True
         self._last_shot_time = 0
         self._game_map = game_map
         self._balloons_in_range = []
@@ -72,11 +72,12 @@ class Tower(Drawable):
         return self._range_radius >= self._position.get_distance(balloon.get_position())
 
     def activate(self):
-        current_time = pygame.time.get_ticks()
-        self.add_to_balloons_in_range()
-        if self._balloons_in_range and current_time - self._last_shot_time > self._shooting_speed:
-            first_balloon = self.get_first_balloon()
-            self.shoot_balloon(first_balloon)
+        if self._is_set:
+            current_time = pygame.time.get_ticks()
+            self.add_to_balloons_in_range()
+            if self._balloons_in_range and current_time - self._last_shot_time > self._shooting_speed:
+                first_balloon = self.get_first_balloon()
+                self.shoot_balloon(first_balloon)
 
     def add_to_balloons_in_range(self):
         self._balloons_in_range = []
@@ -96,7 +97,7 @@ class Tower(Drawable):
         self._last_shot_time = pygame.time.get_ticks()
         direction = self._position.calc_angle_to_point(balloon.get_position())
         dart = Dart(
-            Point(self._position.get_x(), self._position.get_y()),
+            Point((self._position.get_x(), self._position.get_y())),
             direction,
             balloon.get_position(),
             self._range_radius,
@@ -105,3 +106,6 @@ class Tower(Drawable):
             self._game_map)
         self.set_direction_value(direction)
         self._game_map.add_shot(dart)
+
+    def is_clicked(self, mouse_pos: tuple):
+        return self.rect.collidepoint(mouse_pos)

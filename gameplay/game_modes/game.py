@@ -3,25 +3,17 @@ from utils.constants import *
 
 class Game:
 
-    def __init__(self, map_level: Maps, rounds_amount: int):
+    def __init__(self, map_level: Maps, game_mode: GameMode):
         self.__map_level = map_level
         self.__encoded_map_list = []
         self.make_encoded_map_list()
-        self.__rounds_amount = rounds_amount
-        self.__money = 0
-        self.__lives = 40
+        self._game_mode = game_mode
 
     def get_map_level(self):
         return self.__map_level
 
     def get_encoded_map_list(self):
         return self.__encoded_map_list
-
-    def add_money(self, value: int):
-        self.__money += value
-
-    def lose_lives(self, value):
-        self.__lives -= value
 
     def make_encoded_map_list(self):
         try:
@@ -30,3 +22,15 @@ class Game:
         except Exception as e:
             print("Something went wrong", e)
         self.__encoded_map_list = [line.split() for line in content.split('\n')]
+
+    def add_money(self, value):
+        pass
+
+    def lose_lives(self, value):
+        pass
+
+    def get_game_mode(self):
+        return self._game_mode
+
+    def can_afford(self, price: int):
+        return True

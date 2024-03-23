@@ -23,7 +23,7 @@ class BombTower(Tower):
         self._last_shot_time = pygame.time.get_ticks()
         direction = self._position.calc_angle_to_point(balloon.get_position())
         dart = Bomb(
-            Point(self._position.get_x(), self._position.get_y()),
+            Point((self._position.get_x(), self._position.get_y())),
             balloon.get_position(),
             self._range_radius,
             self._shot_damage,

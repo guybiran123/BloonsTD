@@ -21,10 +21,11 @@ class IceTower(Tower):
         self.__freezing_duration = ICE_TOWER_FREEZING_DURATION
 
     def activate(self):
-        current_time = pygame.time.get_ticks()
-        self.add_to_balloons_in_range()
-        if self._balloons_in_range and current_time - self._last_shot_time > self._shooting_speed:
-            self.freeze_balloons()
+        if self._is_set:
+            current_time = pygame.time.get_ticks()
+            self.add_to_balloons_in_range()
+            if self._balloons_in_range and current_time - self._last_shot_time > self._shooting_speed:
+                self.freeze_balloons()
 
     def freeze_balloons(self):
         self._last_shot_time = pygame.time.get_ticks()

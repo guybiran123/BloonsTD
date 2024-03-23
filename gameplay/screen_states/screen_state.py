@@ -25,17 +25,17 @@ class ScreenState:
             text_box.draw(self._screen)
 
     def handle_events(self, event: pygame.event.Event):
-        self.handle_button_clicks(event)
-
-    def handle_button_clicks(self, event: pygame.event.Event):
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            for button in self._buttons.sprites():
-                if button.is_clicked(pygame.mouse.get_pos()):
-                    if button.get_name() in self._button_name_to_function:
-                        self._button_name_to_function[button.get_name()]()
-                        button.reset()
-                    else:
-                        print("No function found for button " + button.get_name())
+            self.handle_button_clicks()
+
+    def handle_button_clicks(self):
+        for button in self._buttons.sprites():
+            if button.is_clicked(pygame.mouse.get_pos()):
+                if button.get_name() in self._button_name_to_function:
+                    self._button_name_to_function[button.get_name()]()
+                    button.reset()
+                else:
+                    print("No function found for button " + button.get_name())
 
     def add_buttons(self, buttons_names: list):
         for button_name in buttons_names:

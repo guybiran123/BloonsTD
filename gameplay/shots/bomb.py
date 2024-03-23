@@ -29,6 +29,6 @@ class Bomb(Shot):
 
     def explode(self):
         self._game_map.add_effect(
-            Explosion(Point(self._position.get_x(), self._position.get_y()), self._damage, self._game_map)
+            Explosion(Point((self._position.get_x(), self._position.get_y())), self._damage, self._game_map)
         )
         self._game_map.remove_shot(self)

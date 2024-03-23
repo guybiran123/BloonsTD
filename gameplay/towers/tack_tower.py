@@ -24,7 +24,7 @@ class TackTower(Tower):
         self._last_shot_time = pygame.time.get_ticks()
         for direction in range(0, 360, 45):
             tack = Tack(
-                Point(self._position.get_x(), self._position.get_y()),
+                Point((self._position.get_x(), self._position.get_y())),
                 direction,
                 self._position.find_point_with_distance_and_angle(direction, self._range_radius),
                 self._range_radius,

@@ -1,5 +1,5 @@
 import pygame
-from gameplay.game import Game
+from gameplay.game_modes.game import Game
 from utils.constants import *
 
 
@@ -14,6 +14,22 @@ class GameMap:
         self.__route_positions = []
         self.make_route_positions()
         self.__screen = screen
+
+    def draw_drawables(self):
+        self.__balloons.draw(self.__screen)
+        self.__towers.draw(self.__screen)
+        self.__shots.draw(self.__screen)
+        self.__effects.draw(self.__screen)
+
+    def activate_drawables(self):
+        for balloon in self.__balloons.sprites():
+            balloon.activate()
+        for tower in self.__towers.sprites():
+            tower.activate()
+        for shot in self.__shots.sprites():
+            shot.activate()
+        for effect in self.__effects.sprites():
+            effect.activate()
 
     def get_balloons(self):
         return self.__balloons
