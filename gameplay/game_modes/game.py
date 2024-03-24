@@ -34,3 +34,9 @@ class Game:
 
     def can_afford(self, price: int):
         return True
+
+    def get_text_money(self):
+        pass
+
+    def get_text_lives(self):
+        pass

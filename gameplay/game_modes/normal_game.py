@@ -18,3 +18,15 @@ class NormalGame(Game):
 
     def can_afford(self, price: int):
         return self.__money >= price
+
+    def get_text_money(self):
+        return str(self.__money)
+
+    def get_text_lives(self):
+        return str(self.__lives)
+
+    def get_money(self):
+        return self.__money
+
+    def get_lives(self):
+        return self.__lives

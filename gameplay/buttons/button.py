@@ -1,6 +1,4 @@
-import pygame
 from utils.drawable import Drawable
-from utils.point import Point
 from utils.direction import Direction
 from utils.constants import *
 

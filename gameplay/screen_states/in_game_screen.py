@@ -22,6 +22,7 @@ class InGameScreen(ScreenState):
         self.__buttons_names = []
         self.create_buttons_names_list()
         super().__init__(screen, self.__buttons_names)
+        self._next_screen_state = State.GAME_ENDED
         self.create_button_name_to_function_dict()
         self.__key_to_function = {}
         self.create_key_to_function_dict()
@@ -32,14 +33,31 @@ class InGameScreen(ScreenState):
         self.__dragged_tower = None
         self.__is_tower_pressed = False
         self.__pressed_tower = None
+        self.add_text_boxes()
         self._background = pygame.image.load(MAP_TO_IMAGE[map_level])
+        self.__shop_background = pygame.image.load(SHOP_BACKGROUND_IMAGE)
+        self.__money_image = pygame.image.load(MONEY_IMAGE)
+        self.__money_image.set_colorkey(COLOR_KEY)
+        self.__lives_image = pygame.image.load(LIVES_IMAGE)
+        self.__lives_image.set_colorkey(COLOR_KEY)
 
     def draw(self):
-        super().draw()
-
+        self._screen.blit(self._background, (0, 0))
+        self.draw_range_circle()
+        self.__game_map.draw_drawables()
+        self.draw_shop_backgrounds()
+        self._buttons.draw(self._screen)
+        self.draw_text_boxes()
 
     def activate(self):
-        pass
+        self.__game_map.activate_drawables()
+        if self.__is_tower_dragged:
+            self.__dragged_tower.set_position(Point(pygame.mouse.get_pos()))
+        if self.__game.get_game_mode() != GameMode.SANDBOX:
+            self._text_boxes[MONEY_TEXT_BOX].set_text(self.__game.get_text_money() + '$')
+            self._text_boxes[LIVES_TEXT_BOX].set_text(self.__game.get_text_lives())
+            for button in self._buttons.sprites()[:END_OF_TOWERS_BUTTONS]:
+                button.is_affordable(self.__game.get_money())
 
     def handle_events(self, event: pygame.event.Event):
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
@@ -51,23 +69,56 @@ class InGameScreen(ScreenState):
                 self.__pressed_tower = None
                 self.handle_towers_clicks()
                 self.handle_button_clicks()
-        elif event.type == pygame.KEYDOWN:
+        elif event.type == pygame.KEYDOWN and self.__game.get_game_mode() == GameMode.SANDBOX:
             if event.key in self.__key_to_function:
                 self.__key_to_function[event.key]()
 
-    def place_tower(self, mouse_pos: tuple):
-        if not self.any_tower_pressed(mouse_pos):
-            if isinstance(self.__dragged_tower, Boat):
-                if self.__game.get_encoded_map_list()[mouse_pos[Y]][mouse_pos[X]] == WATER:
-                    self.__dragged_tower.set_is_set(True)
-            else:
-                if self.__game.get_encoded_map_list()[mouse_pos[Y]][mouse_pos[X]] == PLACEABLE:
-                    self.__dragged_tower.set_is_set(True)
+    def draw_range_circle(self):
+        if self.__is_tower_pressed:
+            self.draw_circle(self.__pressed_tower.get_position().get_tuple(),
+                             self.__pressed_tower.get_range_radius(),
+                             True)
+        elif self.__is_tower_dragged:
+            placeable = self.can_place_tower(pygame.mouse.get_pos())
+            self.draw_circle(self.__dragged_tower.get_position().get_tuple(),
+                             self.__dragged_tower.get_range_radius(),
+                             placeable)
 
-    def any_tower_pressed(self, mouse_pos: tuple):
+    def draw_circle(self, position: tuple, radius: int, placeable: bool):
+        transparency = 128
+        if placeable:
+            color = (128, 128, 128, transparency)  # Grey with transparency
+        else:
+            color = (255, 0, 0, transparency)  # Red with transparency
+
+        pygame.draw.circle(self._screen, color, position, radius)
+
+    def draw_shop_backgrounds(self):
+        self._screen.blit(self.__shop_background, SHOP_BACKGROUND_POSITION)
+        self._screen.blit(self.__money_image, MONEY_POSITION)
+        self._screen.blit(self.__lives_image, LIVES_POSITION)
+
+    def place_tower(self, mouse_pos: tuple):
+        if self.can_place_tower(mouse_pos):
+            self.__dragged_tower.set_is_set(True)
+            self.__is_tower_dragged = False
+            self.__dragged_tower = None
+
+    def any_tower_touched(self, mouse_pos: tuple):
         for tower in self.__game_map.get_towers().sprites():
-            if tower.is_clicked(mouse_pos):
+            if tower.is_clicked(mouse_pos) and tower is not self.__dragged_tower:
                 return True
+        return False
+
+    def can_place_tower(self, mouse_pos: tuple):
+        if not self.any_tower_touched(mouse_pos):
+            if mouse_pos[X] < self._background.get_width():
+                if isinstance(self.__dragged_tower, Boat):
+                    if self.__game.get_encoded_map_list()[mouse_pos[Y]][mouse_pos[X]] == WATER:
+                        return True
+                else:
+                    if self.__game.get_encoded_map_list()[mouse_pos[Y]][mouse_pos[X]] == PLACEABLE:
+                        return True
         return False
 
     def handle_towers_clicks(self):
@@ -77,7 +128,16 @@ class InGameScreen(ScreenState):
                 self.__pressed_tower = tower
 
     def add_text_boxes(self):
-        pass
+        self._text_boxes.append(TextBox(860, 21, 30, WHITE,
+                                        (self.__game.get_text_money()
+                                         + ('' if self.__game.get_game_mode() == GameMode.SANDBOX else '$'))))
+        self._text_boxes.append(TextBox(860, 58, 30, WHITE, self.__game.get_text_lives()))
+        self._text_boxes.append(TextBox(816, 134, 15, WHITE, (str(DART_MONKEY_COST) + '$')))
+        self._text_boxes.append(TextBox(886, 134, 15, WHITE, (str(TACK_TOWER_COST) + '$')))
+        self._text_boxes.append(TextBox(816, 199, 15, WHITE, (str(BOMB_TOWER_COST) + '$')))
+        self._text_boxes.append(TextBox(886, 199, 15, WHITE, (str(ICE_TOWER_COST) + '$')))
+        self._text_boxes.append(TextBox(816, 264, 15, WHITE, (str(SUPER_MONKEY_COST) + '$')))
+        self._text_boxes.append(TextBox(886, 264, 15, WHITE, (str(BOMB_TOWER_COST) + '$')))
 
     def create_buttons_names_list(self):
         self.__buttons_names = [ButtonName.BUY_DART_MONKEY,
@@ -135,36 +195,42 @@ class InGameScreen(ScreenState):
         if self.__game.can_afford(DART_MONKEY_COST):
             self.__is_tower_dragged = True
             self.__dragged_tower = DartMonkey(Point(pygame.mouse.get_pos()), self.__game_map)
+            self.__game_map.add_tower(self.__dragged_tower)
             self.__game.add_money(-DART_MONKEY_COST)
 
     def buy_tack_tower(self):
         if self.__game.can_afford(TACK_TOWER_COST):
             self.__is_tower_dragged = True
             self.__dragged_tower = TackTower(Point(pygame.mouse.get_pos()), self.__game_map)
+            self.__game_map.add_tower(self.__dragged_tower)
             self.__game.add_money(-TACK_TOWER_COST)
 
     def buy_bomb_tower(self):
         if self.__game.can_afford(BOMB_TOWER_COST):
             self.__is_tower_dragged = True
             self.__dragged_tower = BombTower(Point(pygame.mouse.get_pos()), self.__game_map)
+            self.__game_map.add_tower(self.__dragged_tower)
             self.__game.add_money(-BOMB_TOWER_COST)
 
     def buy_ice_tower(self):
         if self.__game.can_afford(ICE_TOWER_COST):
             self.__is_tower_dragged = True
             self.__dragged_tower = IceTower(Point(pygame.mouse.get_pos()), self.__game_map)
+            self.__game_map.add_tower(self.__dragged_tower)
             self.__game.add_money(-ICE_TOWER_COST)
 
     def buy_super_monkey(self):
         if self.__game.can_afford(SUPER_MONKEY_COST):
             self.__is_tower_dragged = True
             self.__dragged_tower = SuperMonkey(Point(pygame.mouse.get_pos()), self.__game_map)
+            self.__game_map.add_tower(self.__dragged_tower)
             self.__game.add_money(-SUPER_MONKEY_COST)
 
     def buy_boat(self):
         if self.__game.can_afford(BOAT_COST):
             self.__is_tower_dragged = True
             self.__dragged_tower = Boat(Point(pygame.mouse.get_pos()), self.__game_map)
+            self.__game_map.add_tower(self.__dragged_tower)
             self.__game.add_money(-BOAT_COST)
 
     def start_round(self):
@@ -193,5 +259,3 @@ class InGameScreen(ScreenState):
 
     def buy_second_upgrade(self):
         pass
-
-

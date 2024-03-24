@@ -16,6 +16,7 @@ class LevelSelectionScreen(ScreenState):
         super().__init__(screen, self.__buttons_names)
         self.__selected_map = Maps.MAP1
         self.__selected_mode = GameMode.NORMAL
+        self._next_screen_state = State.IN_GAME
         self.add_text_boxes()
         self._button_name_to_function = {
             ButtonName.SELECT_MAP1: self.select_map1,

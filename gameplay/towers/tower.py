@@ -33,7 +33,7 @@ class Tower(Drawable):
         self._shooting_speed = shooting_speed  # The smaller, the faster
         self._range_radius = range_radius
         self._is_pressed = False
-        self._is_set = True
+        self._is_set = False
         self._last_shot_time = 0
         self._game_map = game_map
         self._balloons_in_range = []
