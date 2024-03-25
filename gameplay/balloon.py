@@ -22,6 +22,7 @@ class Balloon(Drawable):
         self.__freezing_time = 0
         self.__freezing_duration = 0
         self.__game_map = game_map
+        self.__pop_sound = pygame.mixer.Sound(BALLOON_POP_SOUND)
 
     def get_hp(self):
         return self.__hp
@@ -43,6 +44,7 @@ class Balloon(Drawable):
     def explode(self):
         self.__game_map.add_effect(PoppedBalloon(self._position, self.__game_map))
         self.__game_map.balloon_exploded(self)
+        self.__pop_sound.play()
 
     def activate(self):
         current_time = pygame.time.get_ticks()

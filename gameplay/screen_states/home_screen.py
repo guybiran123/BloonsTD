@@ -7,11 +7,18 @@ from utils.constants import *
 class HomeScreen(ScreenState):
 
     def __init__(self, screen: pygame.surface.Surface):
-        self._buttons_names = [ButtonName.HOME_SCREEN_BUTTON]
+        self._buttons_names = [ButtonName.HOME_SCREEN_BUTTON,
+                               ButtonName.HELP_BUTTON]
         super().__init__(screen, self._buttons_names)
         self._next_screen_state = State.LEVEL_SELECTION
-        self._button_name_to_function = {ButtonName.HOME_SCREEN_BUTTON: self.home_screen_button_clicked}
+        self._button_name_to_function = {ButtonName.HOME_SCREEN_BUTTON: self.home_screen_button_clicked,
+                                         ButtonName.HELP_BUTTON: self.help_button_clicked}
 
     def home_screen_button_clicked(self):
+        self._next_screen_state = State.LEVEL_SELECTION
+        self._change_screen_state = True
+
+    def help_button_clicked(self):
+        self._next_screen_state = State.HELP_SCREEN
         self._change_screen_state = True
 

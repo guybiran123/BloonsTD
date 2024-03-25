@@ -11,10 +11,13 @@ class TowerButton(Button):
         self.__price = TOWER_BUTTON_NAME_TO_PRICE[name]
         self.__affordable = True
 
-    def is_affordable(self, money: int):
+    def is_affordable(self, money: int, map_level: Maps):
         if self.__affordable and self.__price > money:
             self.change_image(TOWERS_BUTTONS_NAME_TO_UNAFFORDABLE_IMAGE[self._name])
             self.__affordable = False
-        elif not self.__affordable and money > self.__price:
+        elif not self.__affordable and money >= self.__price:
             self.change_image(BUTTON_TO_IMAGE[self._name])
             self.__affordable = True
+
+    def get_affordable(self):
+        return self.__affordable

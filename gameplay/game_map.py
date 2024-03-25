@@ -43,6 +43,9 @@ class GameMap:
     def add_tower(self, tower):
         self.__towers.add(tower)
 
+    def remove_tower(self, tower):
+        self.__towers.remove(tower)
+
     def get_shots(self):
         return self.__shots
 

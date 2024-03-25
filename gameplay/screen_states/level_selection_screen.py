@@ -12,7 +12,8 @@ class LevelSelectionScreen(ScreenState):
                                 ButtonName.SELECT_MAP3,
                                 ButtonName.SELECT_NORMAL_MODE,
                                 ButtonName.SELECT_SANDBOX_MODE,
-                                ButtonName.START_GAME]
+                                ButtonName.START_GAME,
+                                ButtonName.CLOSE_BUTTON]
         super().__init__(screen, self.__buttons_names)
         self.__selected_map = Maps.MAP1
         self.__selected_mode = GameMode.NORMAL
@@ -24,7 +25,8 @@ class LevelSelectionScreen(ScreenState):
             ButtonName.SELECT_MAP3: self.select_map3,
             ButtonName.SELECT_NORMAL_MODE: self.select_normal_mode,
             ButtonName.SELECT_SANDBOX_MODE: self.select_sandbox_mode,
-            ButtonName.START_GAME: self.start_game
+            ButtonName.START_GAME: self.start_game,
+            ButtonName.CLOSE_BUTTON: self.close
         }
 
     def draw(self):
@@ -54,6 +56,11 @@ class LevelSelectionScreen(ScreenState):
         self.__selected_mode = GameMode.SANDBOX
 
     def start_game(self):
+        self._next_screen_state = State.IN_GAME
+        self._change_screen_state = True
+
+    def close(self):
+        self._next_screen_state = State.HOME_SCREEN
         self._change_screen_state = True
 
     def get_selected_map(self):
