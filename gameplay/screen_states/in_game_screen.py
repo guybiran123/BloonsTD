@@ -1,5 +1,6 @@
 import pygame
 from utils.text_box import TextBox
+from gameplay.buttons.button import Button
 from gameplay.screen_states.screen_state import ScreenState
 from gameplay.game_modes.normal_game import NormalGame
 from gameplay.game_modes.sandbox_game import SandboxGame
@@ -33,6 +34,7 @@ class InGameScreen(ScreenState):
         self.__dragged_tower = None
         self.__is_tower_pressed = False
         self.__pressed_tower = None
+        self.__did_win = True
         self.add_text_boxes()
         self._background = pygame.image.load(MAP_TO_IMAGE[map_level])
         self.__shop_background = pygame.image.load(SHOP_BACKGROUND_IMAGE)
@@ -40,6 +42,8 @@ class InGameScreen(ScreenState):
         self.__money_image.set_colorkey(COLOR_KEY)
         self.__lives_image = pygame.image.load(LIVES_IMAGE)
         self.__lives_image.set_colorkey(COLOR_KEY)
+        self.__sell_button = None
+        self.create_sell_button()
 
     def draw(self):
         self._screen.blit(self._background, (0, 0))
@@ -57,6 +61,7 @@ class InGameScreen(ScreenState):
         if self.__game.get_game_mode() != GameMode.SANDBOX:
             self.handle_text_changes()
             self.handle_button_changes()
+            self.handle_round()
 
     def handle_events(self, event: pygame.event.Event):
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
@@ -65,6 +70,9 @@ class InGameScreen(ScreenState):
                 self.place_tower(mouse_pos)
                 self.handle_tower_button_clicks()
             else:
+                if self.__sell_button in self._buttons.sprites():
+                    self.handle_sell_button_click()
+                    self._buttons.remove(self.__sell_button)
                 self.__is_tower_pressed = False
                 self.__pressed_tower = None
                 self.handle_towers_clicks()
@@ -72,6 +80,10 @@ class InGameScreen(ScreenState):
         elif event.type == pygame.KEYDOWN and self.__game.get_game_mode() == GameMode.SANDBOX:
             if event.key in self.__key_to_function:
                 self.__key_to_function[event.key]()
+
+    def handle_sell_button_click(self):
+        if self.__sell_button.is_clicked(pygame.mouse.get_pos()):
+            self.sell_tower()
 
     def handle_tower_button_clicks(self):
         for button in self._buttons.sprites()[:END_OF_TOWERS_BUTTONS]:
@@ -85,10 +97,20 @@ class InGameScreen(ScreenState):
     def handle_text_changes(self):
         self._text_boxes[MONEY_TEXT_BOX].set_text(self.__game.get_text_money() + '$')
         self._text_boxes[LIVES_TEXT_BOX].set_text(self.__game.get_text_lives())
+        self._text_boxes[ROUND_TEXT_BOX].set_text(str(self.__game.get_current_round()))
 
     def handle_button_changes(self):
         for button in self._buttons.sprites()[:END_OF_TOWERS_BUTTONS]:
             button.is_affordable(self.__game.get_money(), self.__game.get_map_level())
+
+    def handle_round(self):
+        balloon_to_launch = self.__game.get_balloon_to_launch()
+        if balloon_to_launch != BalloonColor.NO_BALLOON:
+            self.__game_map.add_balloon(Balloon(balloon_to_launch, self.__game_map))
+        is_game_over = self.__game.is_game_over(self.__game_map.get_balloons().sprites() == [])
+        if is_game_over != Ending.NOT_OVER:
+            self._change_screen_state = True
+            self.__did_win = (is_game_over == Ending.WIN)
 
     def draw_range_circle(self):
         if self.__is_tower_pressed:
@@ -144,6 +166,7 @@ class InGameScreen(ScreenState):
             if tower.is_clicked(pygame.mouse.get_pos()):
                 self.__is_tower_pressed = True
                 self.__pressed_tower = tower
+                self._buttons.add(self.__sell_button)
 
     def add_text_boxes(self):
         self._text_boxes.append(TextBox(860, 21, 30, WHITE,
@@ -156,6 +179,9 @@ class InGameScreen(ScreenState):
         self._text_boxes.append(TextBox(886, 199, 15, WHITE, (str(ICE_TOWER_COST) + '$')))
         self._text_boxes.append(TextBox(816, 264, 15, WHITE, (str(SUPER_MONKEY_COST) + '$')))
         self._text_boxes.append(TextBox(886, 264, 15, WHITE, (str(BOAT_COST) + '$')))
+        if self.__game.get_game_mode() != GameMode.SANDBOX:
+            self._text_boxes.append(TextBox(710, 28, 34, WHITE, "Round: "))
+            self._text_boxes.append(TextBox(760, 28, 34, WHITE, str(self.__game.get_current_round())))
 
     def create_buttons_names_list(self):
         self.__buttons_names = [ButtonName.BUY_DART_MONKEY,
@@ -190,7 +216,8 @@ class InGameScreen(ScreenState):
             ButtonName.LAUNCH_BLACK_BALLOON: self.launch_black_balloon,
             ButtonName.LAUNCH_WHITE_BALLOON: self.launch_white_balloon,
             ButtonName.BUY_FIRST_UPGRADE: self.buy_first_upgrade,
-            ButtonName.BUY_SECOND_UPGRADE: self.buy_second_upgrade
+            ButtonName.BUY_SECOND_UPGRADE: self.buy_second_upgrade,
+            ButtonName.SELL_TOWER_BUTTON: self.sell_tower
         }
 
     def create_key_to_function_dict(self):
@@ -283,7 +310,7 @@ class InGameScreen(ScreenState):
             self.__game.add_money(-BOAT_COST)
 
     def start_round(self):
-        pass
+        self.__game.start_round()
 
     def launch_red_balloon(self):
         self.__game_map.add_balloon(Balloon(1, self.__game_map))
@@ -308,3 +335,33 @@ class InGameScreen(ScreenState):
 
     def buy_second_upgrade(self):
         pass
+
+    def sell_tower(self):
+        print("cdscs")
+        price = 0
+        if isinstance(self.__pressed_tower, DartMonkey):
+            price = DART_MONKEY_SELL_COST
+        elif isinstance(self.__pressed_tower, TackTower):
+            price = TACK_TOWER_SELL_COST
+        elif isinstance(self.__pressed_tower, BombTower):
+            price = BOMB_TOWER_SELL_COST
+        elif isinstance(self.__pressed_tower, IceTower):
+            price = ICE_TOWER_SELL_COST
+        elif isinstance(self.__pressed_tower, SuperMonkey):
+            price = SUPER_MONKEY_SELL_COST
+        elif isinstance(self.__pressed_tower, Boat):
+            price = BOAT_SELL_COST
+        self.__game_map.remove_tower(self.__pressed_tower)
+        self.__pressed_tower = None
+        self.__is_tower_pressed = False
+        self.__game.add_money(price)
+
+    def get_did_win(self):
+        return self.__did_win
+
+    def create_sell_button(self):
+        Yposition = 410 if self.__game.get_game_mode() == GameMode.SANDBOX else 340
+        self.__sell_button = Button(Point((851, Yposition),),
+                                    BUTTON_TO_IMAGE[ButtonName.SELL_TOWER_BUTTON],
+                                    ButtonName.SELL_TOWER_BUTTON)
+
