@@ -20,6 +20,8 @@ class NormalGame(Game):
     def get_balloon_to_launch(self):
         if not self.__in_round:
             return BalloonColor.NO_BALLOON
+        if self.__current_round > self.__rounds_amount:
+            return BalloonColor.NO_BALLOON
         current_time = pygame.time.get_ticks()
         if current_time - self.__last_balloon_time > self.__round.get_cooldown():
             balloon_to_return = self.__round.get_balloon()
@@ -33,7 +35,7 @@ class NormalGame(Game):
         return BalloonColor.NO_BALLOON
 
     def is_game_over(self, all_balloons_popped: bool):
-        if self.__current_round == self.__rounds_amount + 1 and all_balloons_popped:
+        if self.__current_round > self.__rounds_amount and all_balloons_popped:
             return Ending.WIN
         if self.__lives <= 0:
             return Ending.LOSE

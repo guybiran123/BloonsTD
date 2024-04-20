@@ -37,7 +37,10 @@ class Balloon(Drawable):
         self.__game_map.add_money(min(damage, self.__hp))
         self.__hp -= damage
         if self.__hp > 0:
-            self.change_image(BALLOON_HP_TO_IMAGE[self.__hp])
+            if not self.__is_frozen:
+                self.change_image(BALLOON_HP_TO_IMAGE[self.__hp])
+            else:
+                self.change_image(BALLOON_HP_TO_FROZEN_IMAGE[self.__hp])
         else:
             self.explode()
 

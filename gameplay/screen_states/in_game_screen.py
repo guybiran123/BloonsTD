@@ -337,7 +337,6 @@ class InGameScreen(ScreenState):
         pass
 
     def sell_tower(self):
-        print("cdscs")
         price = 0
         if isinstance(self.__pressed_tower, DartMonkey):
             price = DART_MONKEY_SELL_COST
