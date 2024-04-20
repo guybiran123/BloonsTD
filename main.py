@@ -1,71 +1,54 @@
 import pygame
 import sys
-from gameplay.game import Game
-from gameplay.game_map import GameMap
-from gameplay.towers.dart_monkey import DartMonkey
-from gameplay.towers.tack_tower import TackTower
-from gameplay.towers.supermonkey import SuperMonkey
-from gameplay.towers.bomb_tower import BombTower
-from gameplay.towers.ice_tower import IceTower
-from gameplay.balloon import Balloon
-from utils.point import Point
+from gameplay.screen_states.screen_state import ScreenState
+from gameplay.screen_states.home_screen import HomeScreen
+from gameplay.screen_states.help_screen import HelpScreen
+from gameplay.screen_states.level_selection_screen import LevelSelectionScreen
+from gameplay.screen_states.in_game_screen import InGameScreen
+from gameplay.screen_states.game_ended_screen import GameEndedScreen
 from utils.constants import *
 
 
 def main():
     pygame.init()
-
+    pygame.mixer.init()
     screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
     pygame.display.set_caption("Bloons TD")
-
     running = True
-    game = Game(Maps.MAP1, 20)
-    game_map = GameMap(game, screen)
-    image = pygame.image.load(MAP_TO_IMAGE[Maps.MAP1])
     clock = pygame.time.Clock()
-    counter = 0
+    screen_state = HomeScreen(screen)
+    pygame.mixer.music.load(BACKGROUND_MUSIC)
+    pygame.mixer.music.set_volume(0.3)
+    pygame.mixer.music.play(-1, 0.0)
 
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                mouse_pos = pygame.mouse.get_pos()
-                mouse_pos_point = Point(mouse_pos[X], mouse_pos[Y])
-                if event.button == 1:
-                    monkey = IceTower(mouse_pos_point, game_map)
-                    game_map.add_tower(monkey)
-                elif event.button == 3:
-                    counter = counter + 1 if counter < 6 else 1
-                    game_map.add_balloon(Balloon(counter, game_map))
-
-        screen.blit(image, (0, 0))
-        activate_drawables(game_map)
-        draw_drawables(game_map, screen)
+            else:
+                screen_state.handle_events(event)
+        screen_state.activate()
+        screen_state.draw()
         pygame.display.flip()
+
+        if screen_state.get_change_screen_state():
+            if screen_state.get_next_screen_state() == State.HOME_SCREEN:
+                screen_state = HomeScreen(screen)
+            elif screen_state.get_next_screen_state() == State.HELP_SCREEN:
+                screen_state = HelpScreen(screen)
+            elif screen_state.get_next_screen_state() == State.LEVEL_SELECTION:
+                screen_state = LevelSelectionScreen(screen)
+            elif screen_state.get_next_screen_state() == State.IN_GAME:
+                screen_state = InGameScreen(screen,
+                                            screen_state.get_selected_map(),
+                                            screen_state.get_selected_mode())
+            elif screen_state.get_next_screen_state() == State.GAME_ENDED:
+                screen_state = GameEndedScreen(screen, screen_state.get_did_win())
 
         clock.tick(REFRESH_RATE)
 
     pygame.quit()
     sys.exit()
-
-
-def draw_drawables(game_map: GameMap, screen: pygame.surface.Surface):
-    game_map.get_balloons().draw(screen)
-    game_map.get_towers().draw(screen)
-    game_map.get_shots().draw(screen)
-    game_map.get_effects().draw(screen)
-
-
-def activate_drawables(game_map: GameMap):
-    for balloon in game_map.get_balloons().sprites():
-        balloon.activate()
-    for tower in game_map.get_towers().sprites():
-        tower.activate()
-    for shot in game_map.get_shots().sprites():
-        shot.activate()
-    for effect in game_map.get_effects().sprites():
-        effect.activate()
 
 
 if __name__ == '__main__':

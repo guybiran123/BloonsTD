@@ -3,9 +3,9 @@ import math
 
 class Point:
 
-    def __init__(self, x, y):
-        self.__x = x
-        self.__y = y
+    def __init__(self, position: tuple):
+        self.__x = position[0]
+        self.__y = position[1]
 
     def get_x(self):
         return self.__x
@@ -51,4 +51,7 @@ class Point:
         angle = -angle - 90
         new_x = self.__x + math.cos(math.radians(angle)) * distance
         new_y = self.__y + math.sin(math.radians(angle)) * distance
-        return Point(new_x, new_y)
+        return Point((new_x, new_y))
+
+    def get_tuple(self):
+        return self.__x, self.__y
