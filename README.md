@@ -28,10 +28,10 @@ A tower defense game inspired by the classic **Bloons TD** series, built in **Py
 
 ## Screenshots
 ```markdown
-![Home Screen](images/home_screen_screenshot.png)
-![Menu Screen](images/menu_screen_screenshot.png)
-![Normal Game](images/normal_game_screenshot.png)
-![Sandbox Game](images/sandbox_game_screenshot.png)
+![Home Screen](images/DemoScreenshots/home_screen_screenshot.png)
+![Menu Screen](images/DemoScreenshots/menu_screenshot.png)
+![Normal Game](images/DemoScreenshots/normal_game_screenshot.png)
+![Sandbox Game](images/DemoScreenshots/sandbox_game_screenshot.png)
 ```
 ---
 
