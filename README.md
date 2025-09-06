@@ -47,12 +47,14 @@ BloonsTD/
 │   ├── game_modes/
 │   ├── screen_states/
 │   ├── shots/
-│   └── towers/
+│   │── towers/
+│   │── balloon.py 
+│   │── game_map.py
+│   └── round.py
 ├── utils/                 # Helpers and utilities
 ├── main.py                # Game entry point
 ├── requirements.txt       # Python dependencies
-├── README.md              # This file
-└── LICENSE
+├── README.md              
 ```
 
 ---
